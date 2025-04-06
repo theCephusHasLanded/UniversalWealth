@@ -1,3 +1,5 @@
+![20250405_2307_Futuristic Tech Sanctuary Diorama_simple_compose_01jr4h1nwde9y9ynx57n7s6cf3](https://github.com/user-attachments/assets/a6f3c8bf-03de-44a3-88da-4ab3617f6ba5)
+
 # LKHN Universal Wealth
 
 A sleek React application showcasing the LKHN Universal Wealth ecosystem - an integrated platform combining financial inclusion tools, physical community spaces, and AI-powered crypto analysis.
