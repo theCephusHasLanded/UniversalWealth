@@ -30,6 +30,7 @@ export interface UserSettings {
   pushNotifications: boolean;
   twoFactorAuth: boolean;
   timezone: string;
+  avatarStyle?: string;
   privacySettings: {
     showProfile: boolean;
     showOnlineStatus: boolean;

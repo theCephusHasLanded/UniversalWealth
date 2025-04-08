@@ -3,6 +3,7 @@ import { User, Clock, MessageSquare, Heart, Filter, Plus, Tag, Search } from 'lu
 import { useTranslation } from '../contexts/TranslationContext';
 import { useUser } from '../contexts/UserContext';
 import Card from '../components/common/Card';
+import UserAvatar from '../components/common/UserAvatar';
 import { ForumPost, ForumCategory } from '../types/user';
 import { Timestamp } from 'firebase/firestore';
 
@@ -257,15 +258,13 @@ const ForumPage: React.FC = () => {
             {posts.filter(post => post.featured).map((post) => (
               <Card key={post.id} className="p-4 h-full flex flex-col">
                 <div className="flex items-start mb-3">
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800 mr-3 flex-shrink-0">
-                    {authors[post.authorId]?.photoURL ? (
-                      <img src={authors[post.authorId].photoURL} alt={authors[post.authorId].name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-700 text-gray-500">
-                        <User size={18} />
-                      </div>
-                    )}
-                  </div>
+                  <UserAvatar 
+                    userId={post.authorId}
+                    displayName={authors[post.authorId]?.name || 'Unknown User'}
+                    photoURL={authors[post.authorId]?.photoURL}
+                    size="md"
+                    className="mr-3"
+                  />
                   <div className="flex-1">
                     <h3 className="font-medium">{post.title}</h3>
                     <div className="flex items-center text-xs text-gray-500 mt-1">
@@ -361,15 +360,13 @@ const ForumPage: React.FC = () => {
             {filteredPosts.map((post) => (
               <Card key={post.id} className="p-4">
                 <div className="flex items-start">
-                  <div className="w-10 h-10 rounded-full overflow-hidden bg-gray-800 mr-3 flex-shrink-0">
-                    {authors[post.authorId]?.photoURL ? (
-                      <img src={authors[post.authorId].photoURL} alt={authors[post.authorId].name} className="w-full h-full object-cover" />
-                    ) : (
-                      <div className="w-full h-full flex items-center justify-center bg-gray-700 text-gray-500">
-                        <User size={18} />
-                      </div>
-                    )}
-                  </div>
+                  <UserAvatar 
+                    userId={post.authorId}
+                    displayName={authors[post.authorId]?.name || 'Unknown User'}
+                    photoURL={authors[post.authorId]?.photoURL}
+                    size="md"
+                    className="mr-3"
+                  />
                   
                   <div className="flex-1">
                     <div className="flex flex-col md:flex-row md:items-center md:justify-between">

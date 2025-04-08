@@ -22,6 +22,7 @@ import { UserRole } from '../types/user';
 import ProfileHeader from '../components/profile/ProfileHeader';
 import ActivityLog from '../components/profile/ActivityLog';
 import Card from '../components/common/Card';
+import UserAvatar from '../components/common/UserAvatar';
 
 interface ProfileTabsProps {
   activeTab: string;
@@ -281,6 +282,7 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
   const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
   const [profileImagePreview, setProfileImagePreview] = useState<string | null>(null);
   const [coverImagePreview, setCoverImagePreview] = useState<string | null>(null);
+  const [avatarStyle, setAvatarStyle] = useState<string>('adventurer');
   
   // Initialize form with user data
   useEffect(() => {
@@ -290,6 +292,10 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
       setLocation(userProfile.location || '');
       setWebsite(userProfile.website || '');
       setPhoneNumber(userProfile.phoneNumber || '');
+      
+      if (userProfile.settings?.avatarStyle) {
+        setAvatarStyle(userProfile.settings.avatarStyle);
+      }
       
       if (userProfile.socialLinks) {
         setTwitter(userProfile.socialLinks.twitter || '');
@@ -353,7 +359,7 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
         coverPhotoURL = await uploadCoverImage(coverImageFile);
       }
       
-      // Update profile
+      // Update profile and settings
       await updateProfile({
         displayName,
         bio,
@@ -367,6 +373,10 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
           instagram,
           linkedin,
           facebook
+        },
+        settings: {
+          ...userProfile?.settings,
+          avatarStyle
         }
       });
       
@@ -395,11 +405,19 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
             <div className="flex items-center space-x-4">
               <div className="relative group">
                 <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-700">
-                  {(profileImagePreview || userProfile?.photoURL) && (
+                  {(profileImagePreview || userProfile?.photoURL) ? (
                     <img 
                       src={profileImagePreview || userProfile?.photoURL} 
                       alt={t('profile.profileImage')} 
                       className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <UserAvatar 
+                      userId={userProfile?.userId || 'temp'}
+                      displayName={displayName || 'User'}
+                      size="lg"
+                      style={avatarStyle as any}
+                      className="w-full h-full"
                     />
                   )}
                 </div>
@@ -412,6 +430,26 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
                     onChange={handleProfileImageChange}
                   />
                 </label>
+              </div>
+              
+              {/* Avatar style selector */}
+              <div className="flex-1">
+                <label className="block text-sm font-medium mb-2">Avatar Style (if no custom image)</label>
+                <select
+                  className="w-full bg-gray-800 border border-gray-700 rounded-sm py-2 px-3"
+                  value={avatarStyle}
+                  onChange={(e) => setAvatarStyle(e.target.value)}
+                >
+                  <option value="adventurer">Adventurer</option>
+                  <option value="avataaars">Avataaars</option>
+                  <option value="bottts">Bottts</option>
+                  <option value="identicon">Identicon</option>
+                  <option value="initials">Initials</option>
+                  <option value="micah">Micah</option>
+                  <option value="thumbs">Thumbs</option>
+                  <option value="lorelei">Lorelei</option>
+                  <option value="pixelart">Pixel Art</option>
+                </select>
               </div>
               
               <div className="flex-1">
@@ -709,19 +747,13 @@ const ProfileConnections: React.FC = () => {
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
       {connections.map((connection) => (
         <Card key={connection.user.userId} className="p-4 flex items-center">
-          <div className="w-12 h-12 rounded-full overflow-hidden bg-gray-700 mr-4">
-            {connection.user.photoURL ? (
-              <img
-                src={connection.user.photoURL}
-                alt={connection.user.displayName}
-                className="w-full h-full object-cover"
-              />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center bg-gray-800 text-gray-400">
-                <User size={20} />
-              </div>
-            )}
-          </div>
+          <UserAvatar 
+            userId={connection.user.userId}
+            displayName={connection.user.displayName}
+            photoURL={connection.user.photoURL}
+            size="md"
+            className="mr-4"
+          />
           
           <div className="flex-1">
             <h4 className="font-medium">{connection.user.displayName}</h4>

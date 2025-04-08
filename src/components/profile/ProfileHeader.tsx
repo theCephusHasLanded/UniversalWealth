@@ -2,6 +2,7 @@ import React from 'react';
 import { Edit, User, Shield } from 'lucide-react';
 import { UserRole } from '../../types/user';
 import { useTranslation } from '../../contexts/TranslationContext';
+import UserAvatar from '../common/UserAvatar';
 
 interface ProfileHeaderProps {
   name: string;
@@ -76,12 +77,14 @@ const ProfileHeader: React.FC<ProfileHeaderProps> = ({
       {/* Profile info section */}
       <div className="flex flex-col md:flex-row items-start md:items-end px-4 md:px-8 -mt-16 relative z-10">
         {/* Profile photo */}
-        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-black bg-gray-800 flex items-center justify-center">
-          {photoURL ? (
-            <img src={photoURL} alt={name} className="w-full h-full object-cover" />
-          ) : (
-            <User size={40} className="text-gray-500" />
-          )}
+        <div className="w-24 h-24 md:w-32 md:h-32 border-4 border-black">
+          <UserAvatar 
+            userId={isCurrentUser ? 'currentUser' : 'otherUser'} // This should be the actual userId in a real app
+            displayName={name}
+            photoURL={photoURL}
+            size="xl"
+            className="w-full h-full"
+          />
         </div>
         
         {/* Profile details */}
