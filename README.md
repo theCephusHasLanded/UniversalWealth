@@ -1,3 +1,5 @@
+![20250405_2307_Futuristic Tech Sanctuary Diorama_simple_compose_01jr4h1nwde9y9ynx57n7s6cf3](https://github.com/user-attachments/assets/a6f3c8bf-03de-44a3-88da-4ab3617f6ba5)
+
 # LKHN Universal Wealth Platform
 
 A comprehensive ecosystem integrating digital finance, physical spaces, AI-driven insights, and membership services to create universal access to prosperity.
@@ -31,6 +33,13 @@ A comprehensive ecosystem integrating digital finance, physical spaces, AI-drive
    - Digital receipts and analytics
    - Hyperlocal economic empowerment
 
+## Tech Stack
+
+- React + TypeScript
+- Vite
+- Tailwind CSS
+- Lucide React (icons)
+
 ## Getting Started
 
 ```bash
@@ -44,13 +53,6 @@ npm run dev
 npm run build
 ```
 
-## Tech Stack
-
-- React + TypeScript
-- Vite
-- Tailwind CSS
-- Lucide React (icons)
-
 ## Project Structure
 
 - `src/components/`: UI components organized by feature
@@ -63,6 +65,9 @@ npm run build
 
 A new paradigm for wealth that is distributed rather than concentrated, communal rather than individualistic, and inclusive by design rather than as an afterthought.
 
+## Screenshots
+<img width="420" alt="Screenshot 2025-04-05 at 10 59 13 PM" src="https://github.com/user-attachments/assets/10bb20c6-baf3-459d-80d1-dd3e5557e37f" />
+
 ---
 
-© 2025 LKHN
+Â© 2025 LKHN
