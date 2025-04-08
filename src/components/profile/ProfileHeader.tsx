@@ -1,0 +1,135 @@
+import React from 'react';
+import { Edit, User, Shield } from 'lucide-react';
+import { UserRole } from '../../types/user';
+import { useTranslation } from '../../contexts/TranslationContext';
+
+interface ProfileHeaderProps {
+  name: string;
+  photoURL?: string;
+  coverPhotoURL?: string;
+  roles: UserRole[];
+  isCurrentUser: boolean;
+  onEdit: () => void;
+}
+
+const ProfileHeader: React.FC<ProfileHeaderProps> = ({
+  name,
+  photoURL,
+  coverPhotoURL,
+  roles,
+  isCurrentUser,
+  onEdit
+}) => {
+  const { t } = useTranslation();
+  
+  // Function to get the role badge color
+  const getRoleBadgeColor = (role: UserRole) => {
+    switch (role) {
+      case UserRole.ADMIN:
+        return 'bg-red-600';
+      case UserRole.COMMUNITY_LEADER:
+        return 'bg-purple-600';
+      case UserRole.BUSINESS_OWNER:
+        return 'bg-blue-600';
+      default:
+        return 'bg-green-600';
+    }
+  };
+  
+  // Function to get the role display name
+  const getRoleDisplayName = (role: UserRole) => {
+    switch (role) {
+      case UserRole.ADMIN:
+        return t('profile.adminRole');
+      case UserRole.COMMUNITY_LEADER:
+        return t('profile.leaderRole');
+      case UserRole.BUSINESS_OWNER:
+        return t('profile.businessRole');
+      default:
+        return t('profile.memberRole');
+    }
+  };
+  
+  return (
+    <div className="mb-8">
+      {/* Cover Photo */}
+      <div className="h-48 rounded-sm overflow-hidden relative bg-gradient-to-r from-gray-900 to-gray-800">
+        {coverPhotoURL && (
+          <img 
+            src={coverPhotoURL} 
+            alt={t('profile.coverPhoto')} 
+            className="w-full h-full object-cover"
+          />
+        )}
+        
+        {/* Edit button (visible only to the profile owner) */}
+        {isCurrentUser && (
+          <button 
+            className="absolute top-4 right-4 bg-black bg-opacity-50 p-2 rounded-full hover:bg-opacity-70"
+            onClick={onEdit}
+          >
+            <Edit size={16} />
+          </button>
+        )}
+      </div>
+      
+      {/* Profile info section */}
+      <div className="flex flex-col md:flex-row items-start md:items-end px-4 md:px-8 -mt-16 relative z-10">
+        {/* Profile photo */}
+        <div className="w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-black bg-gray-800 flex items-center justify-center">
+          {photoURL ? (
+            <img src={photoURL} alt={name} className="w-full h-full object-cover" />
+          ) : (
+            <User size={40} className="text-gray-500" />
+          )}
+        </div>
+        
+        {/* Profile details */}
+        <div className="mt-4 md:mt-0 md:ml-6 mb-4 md:mb-0">
+          <h1 className="text-2xl font-bold">{name}</h1>
+          
+          {/* Roles badges */}
+          <div className="flex flex-wrap gap-2 mt-2">
+            {roles?.map((role, index) => (
+              <div 
+                key={index} 
+                className={`${getRoleBadgeColor(role)} px-2 py-1 rounded-sm text-xs flex items-center`}
+              >
+                <Shield size={12} className="mr-1" />
+                {getRoleDisplayName(role)}
+              </div>
+            ))}
+          </div>
+        </div>
+        
+        {/* Edit profile button (visible only to the profile owner) - desktop version */}
+        {isCurrentUser && (
+          <div className="hidden md:block ml-auto">
+            <button 
+              className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-sm text-sm flex items-center"
+              onClick={onEdit}
+            >
+              <Edit size={14} className="mr-2" />
+              {t('profile.editProfile')}
+            </button>
+          </div>
+        )}
+      </div>
+      
+      {/* Edit profile button (visible only to the profile owner) - mobile version */}
+      {isCurrentUser && (
+        <div className="mt-4 md:hidden px-4">
+          <button 
+            className="bg-gray-800 hover:bg-gray-700 px-4 py-2 rounded-sm text-sm flex items-center w-full justify-center"
+            onClick={onEdit}
+          >
+            <Edit size={14} className="mr-2" />
+            {t('profile.editProfile')}
+          </button>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default ProfileHeader;

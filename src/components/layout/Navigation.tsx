@@ -1,5 +1,5 @@
 import React from 'react';
-import { Globe, CreditCard, Building, BarChart2, Users } from 'lucide-react';
+import { Globe, CreditCard, Building, BarChart2, Users, User, MessageSquare } from 'lucide-react';
 import { useTranslation } from '../../contexts/TranslationContext';
 
 interface NavigationProps {
@@ -51,6 +51,22 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
         >
           <Users size={20} />
           <span className="text-xs mt-1 uppercase tracking-wider">{t('nav.lificosm')}</span>
+        </button>
+
+        <button
+          onClick={() => setActiveTab('forum')}
+          className={`p-4 flex flex-col items-center ${activeTab === 'forum' ? 'text-white' : 'text-gray-600'} transition-colors hover:text-white`}
+        >
+          <MessageSquare size={20} />
+          <span className="text-xs mt-1 uppercase tracking-wider">{t('nav.forum')}</span>
+        </button>
+        
+        <button
+          onClick={() => setActiveTab('profile')}
+          className={`p-4 flex flex-col items-center ${activeTab === 'profile' ? 'text-white' : 'text-gray-600'} transition-colors hover:text-white`}
+        >
+          <User size={20} />
+          <span className="text-xs mt-1 uppercase tracking-wider">{t('nav.profile')}</span>
         </button>
       </div>
     </footer>
