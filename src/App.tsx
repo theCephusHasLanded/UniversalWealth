@@ -6,6 +6,9 @@ import HubPage from './pages/HubPage';
 import TrendCryptoPage from './pages/TrendCryptoPage';
 import LificosmPage from './pages/LificosmPage';
 import LandingPage from './pages/LandingPage';
+import LoginPage from './auth/LoginPage';
+import { AuthProvider } from './auth/AuthContext';
+import ProtectedRoute from './auth/ProtectedRoute';
 
 function App() {
   const [showLanding, setShowLanding] = useState(true);
@@ -23,15 +26,19 @@ function App() {
     };
   }, []);
 
+  const [showLogin, setShowLogin] = useState(false);
+
   const handleGetStarted = () => {
     setShowLanding(false);
   };
 
-  if (showLanding) {
-    return <LandingPage onGetStarted={handleGetStarted} />;
-  }
+  const handleSignIn = () => {
+    setShowLanding(false);
+    setShowLogin(true);
+  };
 
-  return (
+  // Application main content that requires authentication
+  const AuthenticatedApp = () => (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
       {activeTab === 'overview' && <Dashboard />}
       {activeTab === 'wealth' && <WealthPage />}
@@ -39,6 +46,31 @@ function App() {
       {activeTab === 'trendcrypto' && <TrendCryptoPage />}
       {activeTab === 'lificosm' && <LificosmPage />}
     </Layout>
+  );
+
+  return (
+    <AuthProvider>
+      {showLanding ? (
+        <LandingPage 
+          onGetStarted={handleGetStarted} 
+          onSignIn={handleSignIn} 
+        />
+      ) : showLogin ? (
+        <LoginPage 
+          onSuccess={() => setShowLogin(false)}
+          onBackToLanding={() => {
+            setShowLogin(false);
+            setShowLanding(true);
+          }}
+        />
+      ) : (
+        <ProtectedRoute 
+          fallback={<LoginPage onSuccess={() => setShowLogin(false)} />}
+        >
+          <AuthenticatedApp />
+        </ProtectedRoute>
+      )}
+    </AuthProvider>
   );
 }
 

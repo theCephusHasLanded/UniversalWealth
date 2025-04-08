@@ -1,9 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
-import { ArrowRight, ChevronRight, Globe } from 'lucide-react';
+import { ArrowRight, ChevronRight, Globe, LogIn } from 'lucide-react';
 import Card from '../components/common/Card';
 
-const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) => {
+interface LandingPageProps {
+  onGetStarted: () => void;
+  onSignIn?: () => void; // Optional, will use onGetStarted if not provided
+}
+
+const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => {
   const { t } = useTranslation();
   const [currentSlide, setCurrentSlide] = useState(0);
   
@@ -63,12 +68,20 @@ const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) =
               </p>
             </div>
             
-            <button 
-              className="mt-8 bg-white text-black px-6 py-3 flex items-center text-sm uppercase tracking-widest"
-              onClick={onGetStarted}
-            >
-              Enter System <ArrowRight className="ml-2" size={16} />
-            </button>
+            <div className="flex space-x-4 mt-8">
+              <button 
+                className="bg-white text-black px-6 py-3 flex items-center text-sm uppercase tracking-widest"
+                onClick={onGetStarted}
+              >
+                Enter System <ArrowRight className="ml-2" size={16} />
+              </button>
+              <button 
+                className="border border-white text-white px-6 py-3 flex items-center text-sm uppercase tracking-widest"
+                onClick={onSignIn || onGetStarted}
+              >
+                {t('auth.login')} <LogIn className="ml-2" size={16} />
+              </button>
+            </div>
           </div>
         </div>
         
@@ -171,12 +184,20 @@ const LandingPage: React.FC<{ onGetStarted: () => void }> = ({ onGetStarted }) =
           <p className="text-gray-400 mb-8">
             A new paradigm for wealth that is distributed rather than concentrated, communal rather than individualistic, and inclusive by design rather than as an afterthought.
           </p>
-          <button 
-            className="border border-gray-700 px-6 py-3 text-sm uppercase tracking-widest hover:bg-gray-900"
-            onClick={onGetStarted}
-          >
-            Enter System
-          </button>
+          <div className="flex space-x-4 justify-center">
+            <button 
+              className="border border-gray-700 px-6 py-3 text-sm uppercase tracking-widest hover:bg-gray-900"
+              onClick={onGetStarted}
+            >
+              Enter System <ArrowRight className="ml-2 inline" size={16} />
+            </button>
+            <button 
+              className="bg-gray-800 border border-gray-700 px-6 py-3 text-sm uppercase tracking-widest hover:bg-gray-900"
+              onClick={onSignIn || onGetStarted}
+            >
+              {t('auth.login')} <LogIn className="ml-2 inline" size={16} />
+            </button>
+          </div>
         </div>
       </div>
     </div>

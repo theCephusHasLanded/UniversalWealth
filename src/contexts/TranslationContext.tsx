@@ -43,6 +43,22 @@ const translations: Record<Language, Record<string, string>> = {
     'lificosm.name': 'LIFICOSM',
     'lificosm.description': 'Community-powered membership platform for neighborhood empowerment',
     
+    // Authentication
+    'auth.login': 'Sign In',
+    'auth.signup': 'Create Account',
+    'auth.logout': 'Sign Out',
+    'auth.email': 'Email',
+    'auth.password': 'Password',
+    'auth.confirmPassword': 'Confirm Password',
+    'auth.forgotPassword': 'Forgot Password?',
+    'auth.resetPassword': 'Reset Password',
+    'auth.sendResetLink': 'Send Reset Link',
+    'auth.googleLogin': 'Continue with Google',
+    'auth.needAccount': 'Need an account? Sign up',
+    'auth.haveAccount': 'Already have an account? Sign in',
+    'auth.backToLogin': 'Back to sign in',
+    'auth.or': 'OR',
+    
     // Metrics
     'metric.users': 'Users',
     'metric.credit': 'Avg. Credit Increase',
