@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
 import { ArrowRight, ChevronRight, Globe, LogIn } from 'lucide-react';
 import Card from '../components/common/Card';
+import InteractiveBackground from '../components/animations/InteractiveBackground';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -36,17 +37,12 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
 
   return (
     <div className="min-h-screen flex flex-col">
-      {/* Hero Section with rotating background */}
-      <div 
-        className="h-[60vh] relative flex items-center"
-        style={{ 
-          background: placeholderImages[currentSlide],
-          transition: 'background 1s ease-in-out'
-        }}
-      >
-        <div className="absolute inset-0 bg-black bg-opacity-60 z-0"></div>
+      {/* Hero Section with interactive 3D background */}
+      <div className="h-[70vh] relative flex items-center overflow-hidden">
+        <InteractiveBackground />
+        <div className="absolute inset-0 bg-black bg-opacity-40 z-10"></div>
         
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-6 relative z-20">
           <div className="max-w-lg">
             <div className="mb-6">
               <div className="flex items-center mb-4">
@@ -85,16 +81,13 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
           </div>
         </div>
         
-        {/* Slide indicators */}
-        <div className="absolute bottom-6 left-0 right-0 flex justify-center z-10">
-          <div className="flex space-x-2">
-            {placeholderImages.map((_, index) => (
-              <button 
-                key={index}
-                className={`w-2 h-2 rounded-full ${currentSlide === index ? 'bg-white' : 'bg-white bg-opacity-50'}`}
-                onClick={() => setCurrentSlide(index)}
-              ></button>
-            ))}
+        {/* Scroll indicator */}
+        <div className="absolute bottom-6 left-0 right-0 flex justify-center z-20">
+          <div className="animate-bounce">
+            <div className="w-1 h-10 relative">
+              <div className="absolute top-0 left-0 w-full h-full bg-white bg-opacity-20 rounded-full"></div>
+              <div className="absolute top-0 left-0 w-full h-1/2 bg-white rounded-full animate-pulse"></div>
+            </div>
           </div>
         </div>
       </div>

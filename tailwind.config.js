@@ -32,6 +32,6 @@ export default {
     },
   },
   plugins: [
-    require('@tailwindcss/line-clamp'),
+    // As of Tailwind CSS v3.3, the line-clamp plugin is included by default
   ],
 }

@@ -12,10 +12,15 @@ import LoginPage from './auth/LoginPage';
 import { AuthProvider } from './auth/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import ProtectedRoute from './auth/ProtectedRoute';
+import ThreeJsLoader from './components/animations/ThreeJsLoader';
+import WelcomeScreen from './components/animations/WelcomeScreen';
 
 function App() {
   const [showLanding, setShowLanding] = useState(true);
   const [activeTab, setActiveTab] = useState('overview');
+  const [isLoading, setIsLoading] = useState(false);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [showWelcome, setShowWelcome] = useState(false);
 
   useEffect(() => {
     const handleSetActiveTab = (event: CustomEvent) => {
@@ -29,15 +34,49 @@ function App() {
     };
   }, []);
 
+  useEffect(() => {
+    // Simulate loading progress
+    if (isLoading) {
+      const interval = setInterval(() => {
+        setLoadingProgress((prev) => {
+          const newProgress = prev + 0.01;
+          if (newProgress >= 1) {
+            clearInterval(interval);
+            return 1;
+          }
+          return newProgress;
+        });
+      }, 30);
+      
+      return () => clearInterval(interval);
+    }
+  }, [isLoading]);
+
   const [showLogin, setShowLogin] = useState(false);
 
   const handleGetStarted = () => {
-    setShowLanding(false);
+    setIsLoading(true);
+    // Loading animation will transition to login based on progress
   };
 
   const handleSignIn = () => {
+    setIsLoading(true);
+    // Loading animation will transition to login based on progress
+  };
+  
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
     setShowLanding(false);
     setShowLogin(true);
+  };
+  
+  const handleLoginSuccess = () => {
+    setShowLogin(false);
+    setShowWelcome(true);
+  };
+  
+  const handleWelcomeComplete = () => {
+    setShowWelcome(false);
   };
 
   // Application main content that requires authentication
@@ -56,26 +95,39 @@ function App() {
   return (
     <AuthProvider>
       <UserProvider>
-        {showLanding ? (
+        {/* Three.js loading animation overlays everything else when active */}
+        {isLoading && (
+          <ThreeJsLoader 
+            onComplete={handleLoadingComplete} 
+            progress={loadingProgress} 
+          />
+        )}
+        
+        {/* Welcome screen shown after successful login */}
+        {showWelcome && (
+          <WelcomeScreen onComplete={handleWelcomeComplete} />
+        )}
+        
+        {showLanding && !isLoading ? (
           <LandingPage 
             onGetStarted={handleGetStarted} 
             onSignIn={handleSignIn} 
           />
-        ) : showLogin ? (
+        ) : showLogin && !showWelcome ? (
           <LoginPage 
-            onSuccess={() => setShowLogin(false)}
+            onSuccess={handleLoginSuccess}
             onBackToLanding={() => {
               setShowLogin(false);
               setShowLanding(true);
             }}
           />
-        ) : (
+        ) : !showWelcome ? (
           <ProtectedRoute 
-            fallback={<LoginPage onSuccess={() => setShowLogin(false)} />}
+            fallback={<LoginPage onSuccess={handleLoginSuccess} />}
           >
             <AuthenticatedApp />
           </ProtectedRoute>
-        )}
+        ) : null}
       </UserProvider>
     </AuthProvider>
   );
