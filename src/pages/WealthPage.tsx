@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
-import { CreditCard, TrendingUp, Users, Zap, PieChart, Calendar, ArrowRight } from 'lucide-react';
+import { CreditCard, TrendingUp, Users, Zap, PieChart, Calendar, ArrowRight, BookOpen } from 'lucide-react';
 import Card from '../components/common/Card';
 import MetricDisplay from '../components/common/MetricDisplay';
+import GenerationalWealthManager from '../components/wealth/GenerationalWealthManager';
+import AIAssistant from '../components/wealth/AIAssistant';
 import { useTranslation } from '../contexts/TranslationContext';
 
 const WealthPage: React.FC = () => {
   const { t, language } = useTranslation();
-  const [activeSection, setActiveSection] = useState<'overview' | 'pay-in-4' | 'investments' | 'ai-assistant'>('overview');
+  const [activeSection, setActiveSection] = useState<'overview' | 'pay-in-4' | 'investments' | 'ai-assistant' | 'generational'>('overview');
 
   const formatCurrency = (value: number): string => {
     // Use appropriate currency formatting based on language
@@ -85,6 +87,14 @@ const WealthPage: React.FC = () => {
         >
           <Zap size={24} className="mb-2 text-green-500" />
           <span className="text-xs text-center">AI Assistant</span>
+        </button>
+        
+        <button 
+          onClick={() => setActiveSection('generational')}
+          className="bg-gray-900 p-3 rounded-sm flex flex-col items-center justify-center hover:bg-gray-800 transition-colors"
+        >
+          <BookOpen size={24} className="mb-2 text-green-500" />
+          <span className="text-xs text-center">Generational</span>
         </button>
       </div>
     </div>
@@ -220,7 +230,7 @@ const WealthPage: React.FC = () => {
 
   const renderAIAssistant = () => (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
+      <div className="flex justify-between items-center mb-4">
         <h3 className="text-sm uppercase tracking-wider">AI FINANCIAL ASSISTANT</h3>
         <button 
           onClick={() => setActiveSection('overview')}
@@ -230,40 +240,7 @@ const WealthPage: React.FC = () => {
         </button>
       </div>
       
-      <Card className="p-4">
-        <div className="flex items-center justify-center h-72 flex-col">
-          <Zap size={48} className="text-green-500 mb-4" />
-          <p className="text-sm text-center mb-3">Your AI financial assistant is ready to help.</p>
-          <p className="text-xs text-gray-400 text-center mb-4 max-w-xs">
-            Get personalized advice, budget planning, and insights to build wealth and improve financial health.
-          </p>
-          <button className="bg-green-900 text-green-400 px-4 py-2 text-sm rounded-sm hover:bg-green-800">
-            Start Conversation
-          </button>
-        </div>
-      </Card>
-      
-      <div className="space-y-3">
-        <h4 className="text-xs uppercase tracking-wider text-gray-400">Suggested Topics</h4>
-        
-        <div className="flex flex-wrap gap-2">
-          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs">
-            Budget Optimization
-          </div>
-          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs">
-            Debt Reduction
-          </div>
-          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs">
-            Credit Building
-          </div>
-          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs">
-            Investment Strategies
-          </div>
-          <div className="bg-gray-900 px-3 py-1 rounded-full text-xs">
-            Financial Goals
-          </div>
-        </div>
-      </div>
+      <AIAssistant />
     </div>
   );
 
@@ -283,6 +260,7 @@ const WealthPage: React.FC = () => {
       {activeSection === 'pay-in-4' && renderPayIn4()}
       {activeSection === 'investments' && renderInvestments()}
       {activeSection === 'ai-assistant' && renderAIAssistant()}
+      {activeSection === 'generational' && <GenerationalWealthManager />}
     </div>
   );
 };

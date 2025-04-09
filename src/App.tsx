@@ -11,6 +11,7 @@ import ProfilePage from './pages/ProfilePage';
 import LoginPage from './auth/LoginPage';
 import { AuthProvider } from './auth/AuthContext';
 import { UserProvider } from './contexts/UserContext';
+import { WealthProvider } from './contexts/WealthContext';
 import ProtectedRoute from './auth/ProtectedRoute';
 import ThreeJsLoader from './components/animations/ThreeJsLoader';
 import WelcomeScreen from './components/animations/WelcomeScreen';
@@ -83,7 +84,11 @@ function App() {
   const AuthenticatedApp = () => (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
       {activeTab === 'overview' && <Dashboard />}
-      {activeTab === 'wealth' && <WealthPage />}
+      {activeTab === 'wealth' && (
+        <WealthProvider>
+          <WealthPage />
+        </WealthProvider>
+      )}
       {activeTab === 'hub' && <HubPage />}
       {activeTab === 'trendcrypto' && <TrendCryptoPage />}
       {activeTab === 'lificosm' && <LificosmPage />}
