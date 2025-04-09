@@ -51,11 +51,28 @@ A comprehensive ecosystem integrating digital finance, physical spaces, AI-drive
 
 2. Fill in your Firebase credentials in the `.env` file
 
+3. Set up Firebase Service Account for API Server:
+   ```bash
+   # Copy the example service account file
+   cp setup/service-account-example.json setup/service-account.json
+   
+   # Then edit setup/service-account.json with your Firebase Admin SDK credentials
+   # You can download this file from Firebase Console > Project Settings > Service Accounts
+   ```
+
+4. The project no longer requires Firebase Realtime Database - all functionality has been migrated to Firestore.
+
 ```bash
 # Install dependencies
 npm install
 
-# Start development server
+# Initialize Firestore collections (only needed once)
+node setup/firestore-collections.js
+
+# Start API server (in one terminal)
+node server/api-routes.js
+
+# Start development server (in another terminal)
 npm run dev
 
 # Build for production

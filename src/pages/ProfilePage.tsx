@@ -34,7 +34,7 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab, isCu
   const { t } = useTranslation();
   
   return (
-    <div className="flex flex-wrap border-b border-gray-800 mb-4 sm:mb-6 overflow-x-auto">
+    <div className="flex flex-wrap border-b border-gray-800 mb-4 sm:mb-6 overflow-x-auto whitespace-nowrap max-w-full">
       <button
         className={`px-3 sm:px-4 py-2 text-xs sm:text-sm ${activeTab === 'overview' ? 'border-b-2 border-green-500 text-white' : 'text-gray-400'}`}
         onClick={() => setActiveTab('overview')}
@@ -74,8 +74,8 @@ const ProfileOverview: React.FC = () => {
   if (!userProfile) return null;
   
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6">
-      <div className="md:col-span-2">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-6 w-full">
+      <div className="md:col-span-2 w-full">
         <Card className="p-4 sm:p-6 mb-4 sm:mb-6">
           <h3 className="text-base sm:text-lg font-medium mb-2 sm:mb-4">{t('profile.about')}</h3>
           <p className="text-gray-300 mb-4 sm:mb-6">
@@ -402,7 +402,7 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
         <div className="mb-6">
           <div className="mb-6">
             <label className="block text-sm font-medium mb-2">{t('profile.profileImage')}</label>
-            <div className="flex items-center space-x-4">
+            <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
               <div className="relative group">
                 <div className="w-20 h-20 rounded-full overflow-hidden bg-gray-700">
                   {(profileImagePreview || userProfile?.photoURL) ? (
@@ -433,7 +433,7 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
               </div>
               
               {/* Avatar style selector */}
-              <div className="flex-1">
+              <div className="w-full md:flex-1">
                 <label className="block text-sm font-medium mb-2">Avatar Style (if no custom image)</label>
                 <select
                   className="w-full bg-gray-800 border border-gray-700 rounded-sm py-2 px-3"
@@ -452,7 +452,7 @@ const ProfileEdit: React.FC<{ onCancel: () => void }> = ({ onCancel }) => {
                 </select>
               </div>
               
-              <div className="flex-1">
+              <div className="w-full md:flex-1">
                 <label className="block text-sm font-medium mb-2">{t('profile.coverImage')}</label>
                 <div className="relative h-20 w-full rounded-sm overflow-hidden bg-gray-700">
                   {(coverImagePreview || userProfile?.coverPhotoURL) && (

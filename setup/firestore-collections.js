@@ -6,12 +6,12 @@ const serviceAccount = require('./service-account.json');
 
 // Initialize Firebase Admin
 admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-  databaseURL: 'https://lkhn-wealth-default-rtdb.firebaseio.com'
+  credential: admin.credential.cert(serviceAccount)
+  // Removed databaseURL to avoid errors when Realtime Database is not available
 });
 
 const db = admin.firestore();
-const rtdb = admin.database();
+// Removed Realtime Database reference - we're using Firestore only
 
 // Create initial collections and documents
 async function setupFirestoreCollections() {
@@ -133,23 +133,8 @@ async function setupFirestoreCollections() {
       status: 'published'
     });
     
-    // 6. Try to create realtime database reference for online presence
-    try {
-      console.log('Setting up Realtime Database presence...');
-      await rtdb.ref('status/demo-user').set({
-        status: 'online',
-        lastActive: admin.database.ServerValue.TIMESTAMP,
-        device: 'Demo Script'
-      });
-      console.log('Realtime Database setup successful!');
-    } catch (error) {
-      console.warn('Unable to setup Realtime Database. This is expected if you haven\'t created a Realtime Database yet.');
-      console.warn('Please create a Realtime Database in your Firebase console:');
-      console.warn('1. Go to https://console.firebase.google.com/project/lkhn-wealth/database');
-      console.warn('2. Click "Create Database"');
-      console.warn('3. Choose a location close to your users');
-      console.warn('4. Start in test mode for development');
-    }
+    // Removed Realtime Database setup - using Firestore only for presence
+    console.log('Using Firestore for presence tracking instead of Realtime Database');
     
     console.log('Firestore and Realtime Database setup completed successfully!');
   } catch (error) {

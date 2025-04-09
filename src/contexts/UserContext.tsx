@@ -281,14 +281,13 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       
       // Use navigator.sendBeacon for more reliable offline status
       try {
+        // Use a relative URL instead of hardcoded project
         navigator.sendBeacon(
-          `https://firestore.googleapis.com/v1/projects/lkhn-wealth/databases/(default)/documents/presence/${userId}`,
+          `/api/offline-status?userId=${userId}`,
           JSON.stringify({
-            fields: {
-              status: { stringValue: OnlineStatus.OFFLINE },
-              lastActive: { timestampValue: new Date().toISOString() },
-              device: { stringValue: navigator.userAgent }
-            }
+            status: OnlineStatus.OFFLINE,
+            lastActive: new Date().toISOString(),
+            device: navigator.userAgent
           })
         );
       } catch (e) {
@@ -471,15 +470,7 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
 
     try {
-      // Update in Realtime Database
-      const userStatusDatabaseRef = ref(database, `status/${currentUser.uid}`);
-      await set(userStatusDatabaseRef, {
-        status,
-        lastActive: rtdbServerTimestamp(),
-        device: navigator.userAgent
-      });
-
-      // Update in Firestore
+      // Update in Firestore only
       const userStatusFirestoreRef = doc(firestore, 'presence', currentUser.uid);
       await setDoc(userStatusFirestoreRef, {
         status,

@@ -203,7 +203,7 @@ const ForumPage: React.FC = () => {
         
         {/* Search and Filters */}
         <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
-          <div className="relative w-full sm:w-3/4 lg:w-1/2">
+          <div className="relative w-full sm:w-3/5 lg:w-1/2">
             <input
               type="text"
               className="w-full bg-gray-800 border border-gray-700 rounded-sm py-2 pl-10 pr-3"
@@ -214,7 +214,7 @@ const ForumPage: React.FC = () => {
             <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
           </div>
           
-          <div className="flex gap-2 self-end">
+          <div className="flex flex-wrap gap-2 justify-end">
             <button className="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-sm text-sm flex items-center">
               <Filter size={14} className="mr-2" />
               {t('forum.filter')}
@@ -382,8 +382,8 @@ const ForumPage: React.FC = () => {
                     
                     <p className="text-sm text-gray-300 my-3 line-clamp-2">{post.content}</p>
                     
-                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                      <div className="flex items-center space-x-3 order-2 sm:order-1">
+                    <div className="flex flex-col-reverse sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-center space-x-3">
                         <div className="flex items-center text-sm text-gray-500">
                           <Heart size={14} className="mr-1" />
                           <span>{post.likes.length}</span>
@@ -398,7 +398,7 @@ const ForumPage: React.FC = () => {
                         </span>
                       </div>
                       
-                      <div className="flex flex-wrap gap-2 order-1 sm:order-2 mb-2 sm:mb-0">
+                      <div className="flex flex-wrap gap-2 mb-2 sm:mb-0">
                         {post.tags.slice(0, 3).map((tag, idx) => (
                           <span key={idx} className="text-sm bg-gray-800 px-3 py-1 rounded-sm flex items-center">
                             <Tag size={12} className="mr-1" />
