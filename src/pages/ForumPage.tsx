@@ -202,8 +202,8 @@ const ForumPage: React.FC = () => {
         <p className="text-gray-400 mb-6">{t('forum.description')}</p>
         
         {/* Search and Filters */}
-        <div className="flex flex-col md:flex-row justify-between gap-4 mb-6">
-          <div className="relative w-full md:w-1/2">
+        <div className="flex flex-col sm:flex-row justify-between gap-4 mb-6">
+          <div className="relative w-full sm:w-3/4 lg:w-1/2">
             <input
               type="text"
               className="w-full bg-gray-800 border border-gray-700 rounded-sm py-2 pl-10 pr-3"
@@ -214,7 +214,7 @@ const ForumPage: React.FC = () => {
             <Search size={16} className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500" />
           </div>
           
-          <div className="flex gap-2">
+          <div className="flex gap-2 self-end">
             <button className="px-3 py-2 bg-gray-800 hover:bg-gray-700 rounded-sm text-sm flex items-center">
               <Filter size={14} className="mr-2" />
               {t('forum.filter')}
@@ -228,23 +228,23 @@ const ForumPage: React.FC = () => {
         </div>
         
         {/* Categories */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
           <Card
-            className={`p-4 cursor-pointer ${activeCategory === null ? 'bg-gray-800' : 'bg-gray-900'} hover:bg-gray-800 transition-colors`}
+            className={`p-5 cursor-pointer ${activeCategory === null ? 'bg-gray-800' : 'bg-gray-900'} hover:bg-gray-800 transition-colors`}
             onClick={() => setActiveCategory(null)}
           >
-            <h3 className="font-medium mb-1">{t('forum.allCategories')}</h3>
-            <p className="text-xs text-gray-400">{posts.length} {t('forum.posts')}</p>
+            <h3 className="text-lg font-medium mb-2">{t('forum.allCategories')}</h3>
+            <p className="text-sm text-gray-400">{posts.length} {t('forum.posts')}</p>
           </Card>
           
           {categories.map((category) => (
             <Card
               key={category.id}
-              className={`p-4 cursor-pointer ${activeCategory === category.id ? 'bg-gray-800' : 'bg-gray-900'} hover:bg-gray-800 transition-colors`}
+              className={`p-5 cursor-pointer ${activeCategory === category.id ? 'bg-gray-800' : 'bg-gray-900'} hover:bg-gray-800 transition-colors`}
               onClick={() => setActiveCategory(category.id === activeCategory ? null : category.id)}
             >
-              <h3 className="font-medium mb-1">{category.name}</h3>
-              <p className="text-xs text-gray-400">{category.postCount} {t('forum.posts')}</p>
+              <h3 className="text-lg font-medium mb-2">{category.name}</h3>
+              <p className="text-sm text-gray-400">{category.postCount} {t('forum.posts')}</p>
             </Card>
           ))}
         </div>
@@ -252,52 +252,52 @@ const ForumPage: React.FC = () => {
       
       {/* Featured Posts */}
       {!activeCategory && !searchQuery && (
-        <div className="mb-8">
-          <h2 className="text-lg font-medium mb-4">{t('forum.featuredPosts')}</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="mb-10">
+          <h2 className="text-xl font-bold mb-6">{t('forum.featuredPosts')}</h2>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {posts.filter(post => post.featured).map((post) => (
-              <Card key={post.id} className="p-4 h-full flex flex-col">
-                <div className="flex items-start mb-3">
+              <Card key={post.id} className="p-6 h-full flex flex-col shadow-lg">
+                <div className="flex items-start mb-4">
                   <UserAvatar 
                     userId={post.authorId}
                     displayName={authors[post.authorId]?.name || 'Unknown User'}
                     photoURL={authors[post.authorId]?.photoURL}
-                    size="md"
-                    className="mr-3"
+                    size="lg"
+                    className="mr-4"
                   />
                   <div className="flex-1">
-                    <h3 className="font-medium">{post.title}</h3>
-                    <div className="flex items-center text-xs text-gray-500 mt-1">
+                    <h3 className="text-lg font-medium mb-1">{post.title}</h3>
+                    <div className="flex items-center text-sm text-gray-500">
                       <span>{authors[post.authorId]?.name || 'Unknown User'}</span>
                       <span className="mx-2">·</span>
-                      <Clock size={12} className="mr-1" />
+                      <Clock size={14} className="mr-1" />
                       <span>{formatDate(post.createdAt)}</span>
                     </div>
                   </div>
                 </div>
                 
-                <p className="text-sm text-gray-400 mb-4 line-clamp-3">{post.content}</p>
+                <p className="text-base text-gray-300 mb-6 line-clamp-3">{post.content}</p>
                 
                 <div className="mt-auto flex items-center justify-between">
-                  <div className="flex items-center space-x-3">
-                    <div className="flex items-center text-xs text-gray-500">
-                      <Heart size={12} className="mr-1" />
+                  <div className="flex items-center space-x-4">
+                    <div className="flex items-center text-sm text-gray-400">
+                      <Heart size={16} className="mr-2" />
                       <span>{post.likes.length}</span>
                     </div>
-                    <div className="flex items-center text-xs text-gray-500">
-                      <MessageSquare size={12} className="mr-1" />
+                    <div className="flex items-center text-sm text-gray-400">
+                      <MessageSquare size={16} className="mr-2" />
                       <span>{post.commentCount}</span>
                     </div>
                   </div>
                   
-                  <div className="flex flex-wrap gap-1">
+                  <div className="flex flex-wrap gap-2">
                     {post.tags.slice(0, 2).map((tag, idx) => (
-                      <span key={idx} className="text-xs bg-gray-800 px-2 py-1 rounded-sm">
+                      <span key={idx} className="text-sm bg-gray-700 px-3 py-1 rounded-sm">
                         {tag}
                       </span>
                     ))}
                     {post.tags.length > 2 && (
-                      <span className="text-xs bg-gray-800 px-2 py-1 rounded-sm">
+                      <span className="text-sm bg-gray-700 px-3 py-1 rounded-sm">
                         +{post.tags.length - 2}
                       </span>
                     )}
@@ -311,7 +311,7 @@ const ForumPage: React.FC = () => {
       
       {/* Post List */}
       <div>
-        <div className="flex justify-between items-center mb-4">
+        <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-4 gap-2">
           <h2 className="text-lg font-medium">
             {activeCategory 
               ? categories.find(c => c.id === activeCategory)?.name || t('forum.posts')
@@ -358,21 +358,21 @@ const ForumPage: React.FC = () => {
         ) : (
           <div className="space-y-4">
             {filteredPosts.map((post) => (
-              <Card key={post.id} className="p-4">
+              <Card key={post.id} className="p-5">
                 <div className="flex items-start">
                   <UserAvatar 
                     userId={post.authorId}
                     displayName={authors[post.authorId]?.name || 'Unknown User'}
                     photoURL={authors[post.authorId]?.photoURL}
                     size="md"
-                    className="mr-3"
+                    className="mr-4"
                   />
                   
                   <div className="flex-1">
-                    <div className="flex flex-col md:flex-row md:items-center md:justify-between">
-                      <h3 className="font-medium">{post.title}</h3>
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+                      <h3 className="text-base font-medium">{post.title}</h3>
                       
-                      <div className="flex items-center text-xs text-gray-500 mt-1 md:mt-0">
+                      <div className="flex items-center text-sm text-gray-500 mt-1 sm:mt-0">
                         <span>{authors[post.authorId]?.name || 'Unknown User'}</span>
                         <span className="mx-2">·</span>
                         <Clock size={12} className="mr-1" />
@@ -380,33 +380,33 @@ const ForumPage: React.FC = () => {
                       </div>
                     </div>
                     
-                    <p className="text-sm text-gray-400 my-3 line-clamp-2">{post.content}</p>
+                    <p className="text-sm text-gray-300 my-3 line-clamp-2">{post.content}</p>
                     
-                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                      <div className="flex items-center space-x-3 order-2 md:order-1">
-                        <div className="flex items-center text-xs text-gray-500">
-                          <Heart size={12} className="mr-1" />
+                    <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                      <div className="flex items-center space-x-3 order-2 sm:order-1">
+                        <div className="flex items-center text-sm text-gray-500">
+                          <Heart size={14} className="mr-1" />
                           <span>{post.likes.length}</span>
                         </div>
-                        <div className="flex items-center text-xs text-gray-500">
-                          <MessageSquare size={12} className="mr-1" />
+                        <div className="flex items-center text-sm text-gray-500">
+                          <MessageSquare size={14} className="mr-1" />
                           <span>{post.commentCount}</span>
                         </div>
                         
-                        <span className="text-xs px-2 py-1 bg-gray-800 rounded-sm">
+                        <span className="text-sm px-3 py-1 bg-gray-800 rounded-sm">
                           {categories.find(c => c.id === post.category)?.name || 'General'}
                         </span>
                       </div>
                       
-                      <div className="flex flex-wrap gap-1 order-1 md:order-2">
+                      <div className="flex flex-wrap gap-2 order-1 sm:order-2 mb-2 sm:mb-0">
                         {post.tags.slice(0, 3).map((tag, idx) => (
-                          <span key={idx} className="text-xs bg-gray-800 px-2 py-1 rounded-sm flex items-center">
-                            <Tag size={10} className="mr-1" />
+                          <span key={idx} className="text-sm bg-gray-800 px-3 py-1 rounded-sm flex items-center">
+                            <Tag size={12} className="mr-1" />
                             {tag}
                           </span>
                         ))}
                         {post.tags.length > 3 && (
-                          <span className="text-xs bg-gray-800 px-2 py-1 rounded-sm">
+                          <span className="text-sm bg-gray-800 px-3 py-1 rounded-sm">
                             +{post.tags.length - 3}
                           </span>
                         )}

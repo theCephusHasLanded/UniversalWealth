@@ -42,6 +42,15 @@ A comprehensive ecosystem integrating digital finance, physical spaces, AI-drive
 
 ## Getting Started
 
+### Environment Setup
+
+1. Copy the example environment file:
+   ```bash
+   cp .env.example .env
+   ```
+
+2. Fill in your Firebase credentials in the `.env` file
+
 ```bash
 # Install dependencies
 npm install

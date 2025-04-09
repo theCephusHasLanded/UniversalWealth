@@ -12,13 +12,7 @@ import {
   serverTimestamp,
   Timestamp
 } from 'firebase/firestore';
-import { 
-  ref, 
-  onDisconnect, 
-  onValue, 
-  set, 
-  serverTimestamp as rtdbServerTimestamp 
-} from 'firebase/database';
+// Realtime Database import removed - using Firestore only
 import { 
   uploadBytesResumable, 
   getDownloadURL, 
@@ -209,14 +203,14 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
       // Setup online presence tracking
       setupOnlinePresence(currentUser.uid);
 
-      // Listen for online users
-      const onlineUsersRef = ref(database, 'status');
-      
-      const unsubscribeOnlineUsers = onValue(onlineUsersRef, (snapshot) => {
-        const data = snapshot.val() || {};
-        setOnlineUsers(data);
-      }, (err) => {
-        setError('Error listening to online users: ' + err.message);
+      // Listen for online users using Firestore
+      const presenceQuery = query(collection(firestore, 'presence'));
+      const unsubscribeOnlineUsers = onSnapshot(presenceQuery, (snapshot) => {
+        const users: Record<string, OnlinePresence> = {};
+        snapshot.forEach(doc => {
+          users[doc.id] = doc.data() as OnlinePresence;
+        });
+        setOnlineUsers(users);
       });
 
       // Cleanup listeners when unmounted
@@ -230,53 +224,95 @@ export const UserProvider: React.FC<{ children: React.ReactNode }> = ({ children
     }
   }, [currentUser]);
 
-  // Setup user online presence monitoring
+  // Setup user online presence monitoring using only Firestore
   const setupOnlinePresence = (userId: string) => {
     if (!userId) return;
 
-    // Create references
-    const userStatusDatabaseRef = ref(database, `status/${userId}`);
+    // Create Firestore reference
     const userStatusFirestoreRef = doc(firestore, 'presence', userId);
 
-    // Store the timestamp of the last time the user was seen online
-    const connectedRef = ref(database, '.info/connected');
+    // Set online status in Firestore
+    const onlineStatus: OnlinePresence = {
+      status: OnlineStatus.ONLINE,
+      lastActive: Timestamp.now(),
+      device: navigator.userAgent
+    };
     
-    onValue(connectedRef, (snapshot) => {
-      if (snapshot.val() === true) {
-        // We're connected (or reconnected)!
-        
-        // Set the online status in the database
-        const onlineStatus: OnlinePresence = {
+    // Update presence when user is online
+    setDoc(userStatusFirestoreRef, onlineStatus, { merge: true })
+      .catch(err => {
+        console.warn('Error updating presence in Firestore:', err.message);
+      });
+    
+    // Set up a periodic update for presence in Firestore
+    const interval = setInterval(() => {
+      if (document.visibilityState === 'visible') {
+        setDoc(userStatusFirestoreRef, {
           status: OnlineStatus.ONLINE,
           lastActive: Timestamp.now(),
           device: navigator.userAgent
-        };
-        
-        // Set the Realtime Database status
-        const dbStatus = {
-          ...onlineStatus,
-          lastActive: rtdbServerTimestamp()
-        };
-
-        // Set up the disconnect hook to update status when user disconnects
-        const onDisconnectRef = onDisconnect(userStatusDatabaseRef);
-        
-        onDisconnectRef.set({
-          status: OnlineStatus.OFFLINE,
-          lastActive: rtdbServerTimestamp(),
-          device: navigator.userAgent
-        }).then(() => {
-          // Set the status to online
-          set(userStatusDatabaseRef, dbStatus);
-          
-          // Also update in Firestore
-          setDoc(userStatusFirestoreRef, onlineStatus, { merge: true })
-            .catch(err => {
-              setError('Error updating presence in Firestore: ' + err.message);
-            });
-        });
+        }, { merge: true });
       }
-    });
+    }, 60000); // Update every minute
+    
+    // Handle page visibility changes to update status
+    const handleVisibilityChange = () => {
+      const newStatus = document.visibilityState === 'visible' 
+        ? OnlineStatus.ONLINE 
+        : OnlineStatus.AWAY;
+      
+      setDoc(userStatusFirestoreRef, {
+        status: newStatus,
+        lastActive: Timestamp.now(),
+        device: navigator.userAgent
+      }, { merge: true });
+    };
+    
+    // Update status on visibility change
+    document.addEventListener('visibilitychange', handleVisibilityChange);
+    
+    // Handle page unload to set offline status
+    const handleUnload = () => {
+      const offlineStatus = {
+        status: OnlineStatus.OFFLINE,
+        lastActive: Timestamp.now(),
+        device: navigator.userAgent
+      };
+      
+      // Use navigator.sendBeacon for more reliable offline status
+      try {
+        navigator.sendBeacon(
+          `https://firestore.googleapis.com/v1/projects/lkhn-wealth/databases/(default)/documents/presence/${userId}`,
+          JSON.stringify({
+            fields: {
+              status: { stringValue: OnlineStatus.OFFLINE },
+              lastActive: { timestampValue: new Date().toISOString() },
+              device: { stringValue: navigator.userAgent }
+            }
+          })
+        );
+      } catch (e) {
+        // Fallback to synchronous XHR if sendBeacon is not supported
+        try {
+          const xhr = new XMLHttpRequest();
+          xhr.open('POST', `/api/offline-status?userId=${userId}`, false);
+          xhr.setRequestHeader('Content-Type', 'application/json');
+          xhr.send(JSON.stringify(offlineStatus));
+        } catch (err) {
+          console.warn('Failed to send offline status');
+        }
+      }
+    };
+    
+    // Update status on page unload
+    window.addEventListener('beforeunload', handleUnload);
+    
+    // Return cleanup function
+    return () => {
+      clearInterval(interval);
+      document.removeEventListener('visibilitychange', handleVisibilityChange);
+      window.removeEventListener('beforeunload', handleUnload);
+    };
   };
 
   // Update user profile information
