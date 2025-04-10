@@ -11,6 +11,7 @@ const LanguageSelector: React.FC = () => {
     { code: 'en', name: t('language.en') },
     { code: 'es', name: t('language.es') },
     { code: 'fr', name: t('language.fr') },
+    { code: 'ht', name: t('language.ht') },
     { code: 'zh', name: t('language.zh') },
     { code: 'ja', name: t('language.ja') },
     { code: 'ru', name: t('language.ru') },
@@ -28,7 +29,7 @@ const LanguageSelector: React.FC = () => {
 
   const handleLanguageChange = (code: string) => {
     // Set the language
-    setLanguage(code as 'en' | 'es' | 'fr' | 'zh' | 'ja' | 'ru' | 'xh' | 'ar');
+    setLanguage(code as 'en' | 'es' | 'fr' | 'zh' | 'ja' | 'ru' | 'xh' | 'ar' | 'ht');
     
     // Set RTL attribute for Arabic language
     if (code === 'ar') {
@@ -39,6 +40,32 @@ const LanguageSelector: React.FC = () => {
     
     closeDropdown();
   };
+
+  // Calculate dropdown position based on button position
+  const getDropdownPosition = () => {
+    if (dropdownRef.current) {
+      const rect = dropdownRef.current.getBoundingClientRect();
+      return {
+        top: `${rect.bottom + 10}px`,
+        right: `${window.innerWidth - rect.right}px`,
+      };
+    }
+    return { top: '60px', right: '30px' };
+  };
+  
+  // Recalculate position when window is resized
+  useEffect(() => {
+    const handleResize = () => {
+      if (isOpen) {
+        // Force a re-render to update position
+        setIsOpen(false);
+        setTimeout(() => setIsOpen(true), 0);
+      }
+    };
+    
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, [isOpen]);
 
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -58,19 +85,30 @@ const LanguageSelector: React.FC = () => {
     <div className="relative" ref={dropdownRef}>
       <button
         onClick={toggleDropdown}
-        className="text-gray-400 hover:text-white transition-colors flex items-center gap-1 text-xs uppercase tracking-wider"
+        className="text-neutral-400 hover:text-gold transition-colors flex items-center gap-1 text-xs uppercase tracking-wider"
       >
         <Globe size={14} />
         <span>{language.toUpperCase()}</span>
       </button>
 
       {isOpen && (
-        <div className="absolute right-0 mt-2 w-40 rounded-sm bg-gray-900 border border-gray-700 overflow-hidden z-50 language-dropdown">
+        <div 
+          style={{
+            position: 'fixed',
+            ...getDropdownPosition(),
+            zIndex: 9999
+          }}
+          className="w-40 bg-navy-700 border border-navy-600 backdrop-blur-sm overflow-hidden language-dropdown shadow-xl animate-fade-in relative"
+        >
           {languages.map(({ code, name }) => (
             <button
               key={code}
               onClick={() => handleLanguageChange(code)}
-              className={`block w-full text-left px-4 py-2 text-xs ${language === code ? 'bg-gray-800 text-white' : 'text-gray-300 hover:bg-gray-800'}`}
+              className={`block w-full text-left px-4 py-2 text-xs tracking-wide transition-colors ${
+                language === code 
+                  ? 'bg-navy-600 text-gold border-l-2 border-gold' 
+                  : 'text-neutral-300 hover:bg-navy-600 hover:text-white'
+              }`}
               style={{ direction: code === 'ar' ? 'rtl' : 'ltr' }}
             >
               {name}

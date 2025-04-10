@@ -6,10 +6,9 @@ import {
   BarChart2, 
   Users, 
   User, 
-  MessageSquare,
-  ChevronLeft,
-  ChevronRight
+  MessageSquare
 } from 'lucide-react';
+import EyeLogo from '../common/EyeLogo';
 import { useTranslation } from '../../contexts/TranslationContext';
 
 interface NavigationProps {
@@ -30,6 +29,7 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
   
   // Store all menu items
   const allMenuItems: MenuItem[] = [
+    { id: 'invite', icon: <div className="w-5 h-5 relative"><EyeLogo size={20} variant="gold" /></div>, label: t('nav.invite') || 'Invite' },
     { id: 'overview', icon: <Globe size={20} />, label: t('nav.overview') },
     { id: 'wealth', icon: <CreditCard size={20} />, label: t('nav.wealth') },
     { id: 'hub', icon: <Building size={20} />, label: t('nav.hub') },
@@ -144,22 +144,11 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
 
   return (
     <footer 
-      className="fixed bottom-0 left-0 right-0 border-t border-gray-900 bg-black"
+      className="fixed bottom-0 left-0 right-0 border-t border-navy-700 bg-navy-800/95 backdrop-blur-sm"
       onTouchStart={isTouch ? handleTouchStart : undefined}
       onTouchEnd={isTouch ? handleTouchEnd : undefined}
     >
       <div className="flex justify-between items-center px-2 max-w-lg mx-auto">
-        {/* Left control button */}
-        {startIndex > 0 && (
-          <button 
-            onClick={() => rotateMenu(-1)}
-            className="p-2 text-gray-500 hover:text-white"
-            aria-label="Show previous menu options"
-          >
-            <ChevronLeft size={18} />
-          </button>
-        )}
-        
         {/* Menu items */}
         <div 
           ref={containerRef}
@@ -173,9 +162,12 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
                 onClick={() => {
                   setActiveTab(item.id);
                   animateRotation(index);
+                  
+                  // Dispatch custom event to set active tab
+                  window.dispatchEvent(new CustomEvent('setActiveTab', { detail: item.id }));
                 }}
                 className={`menu-item p-3 flex flex-col items-center transition-all ${
-                  isActive ? 'text-white' : 'text-gray-600'
+                  isActive ? 'text-gold' : 'text-neutral-500'
                 } hover:text-white`}
                 style={{
                   transform: isActive ? 'translateY(0) scale(1.1)' : 'translateY(4px) scale(1)',
@@ -184,30 +176,22 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
               >
                 {item.icon}
                 <span className="text-xs mt-1 uppercase tracking-wider">{item.label}</span>
+                {isActive && (
+                  <div className="h-0.5 w-5 bg-gold mt-1.5 rounded-full"></div>
+                )}
               </button>
             );
           })}
         </div>
-        
-        {/* Right control button */}
-        {startIndex < allMenuItems.length - visibleCount && (
-          <button 
-            onClick={() => rotateMenu(1)}
-            className="p-2 text-gray-500 hover:text-white"
-            aria-label="Show more menu options"
-          >
-            <ChevronRight size={18} />
-          </button>
-        )}
       </div>
       
       {/* Optional: Indicator dots for menu position */}
       <div className="flex justify-center pb-1">
-        {Array.from({ length: allMenuItems.length - visibleCount + 1 }).map((_, index) => (
+        {Array.from({ length: Math.min(3, Math.ceil(allMenuItems.length / visibleCount)) }).map((_, index) => (
           <div 
             key={index}
             className={`h-1 w-1 rounded-full mx-0.5 ${
-              index === startIndex ? 'bg-green-500' : 'bg-gray-700'
+              Math.floor(startIndex / visibleCount) === index ? 'bg-gold' : 'bg-navy-600'
             }`}
           />
         ))}

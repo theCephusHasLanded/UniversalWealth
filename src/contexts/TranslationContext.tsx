@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 
-type Language = 'en' | 'es' | 'fr' | 'zh' | 'ja' | 'ru' | 'xh' | 'ar';
+type Language = 'en' | 'es' | 'fr' | 'zh' | 'ja' | 'ru' | 'xh' | 'ar' | 'ht';
 
 interface TranslationContextType {
   language: Language;
@@ -13,6 +13,8 @@ const TranslationContext = createContext<TranslationContextType | undefined>(und
 // Simple translation dictionary with nested objects for different sections
 const translations: Record<Language, Record<string, string>> = {
   en: {
+    // Add language.ht entry
+    'language.ht': 'Kreyòl Ayisyen',
     // Common
     'app.name': 'LKHN UNIVERSAL WEALTH',
     'app.tagline': 'QUANTUM ECOSYSTEM',
@@ -73,7 +75,7 @@ const translations: Record<Language, Record<string, string>> = {
     'footer.back_to_top': 'Back to top',
     
     // Navigation
-    'nav.home': 'Home',
+    'nav.invite': 'Invite',
     'nav.overview': 'Overview',
     'nav.wealth': 'Wealth',
     'nav.hub': 'Hub',
@@ -227,6 +229,17 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ar': 'العربية',
   },
   es: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'RIQUEZA UNIVERSAL LKHN',
     'app.tagline': 'ECOSISTEMA CUÁNTICO',
@@ -313,6 +326,17 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ar': 'العربية',
   },
   fr: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'RICHESSE UNIVERSELLE LKHN',
     'app.tagline': 'ÉCOSYSTÈME QUANTIQUE',
@@ -399,6 +423,17 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ar': 'العربية',
   },
   zh: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'LKHN 环球财富',
     'app.tagline': '量子生态系统',
@@ -485,6 +520,17 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ar': 'العربية',
   },
   ja: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'LKHN ユニバーサルウェルス',
     'app.tagline': '量子エコシステム',
@@ -571,6 +617,17 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ar': 'العربية',
   },
   ru: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'LKHN УНИВЕРСАЛЬНОЕ БОГАТСТВО',
     'app.tagline': 'КВАНТОВАЯ ЭКОСИСТЕМА',
@@ -657,6 +714,17 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ar': 'العربية',
   },
   xh: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'LKHN UBUTYEBI JIKELELE',
     'app.tagline': 'INKQUBO YEQUANTUM',
@@ -742,7 +810,75 @@ const translations: Record<Language, Record<string, string>> = {
     'language.xh': 'isiXhosa',
     'language.ar': 'العربية',
   },
+  ht: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
+    // Common
+    'app.name': 'LKHN RICHÈS INIVÈSÈL',
+    'app.tagline': 'EKOSISTÈM KWANTIK',
+    'app.overview': 'Yon ekosistèm konplè ki entegre finans dijital, espas fizik ak pèspektiv AI pou kreye aksè inivèsèl nan pwosperite.',
+    'app.explore': 'EKSPLORE ENTEGRASYON KWANTIK',
+    
+    // Footer
+    'footer.copyright': 'Tout dwa rezève',
+    'footer.legal': 'Legal',
+    'footer.privacy': 'Règleman sou Konfidansyalite',
+    'footer.terms': 'Tèm ak Kondisyon',
+    'footer.cookies': 'Cookies',
+    'footer.contact': 'Kontakte',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'Rezève yon Konsiltasyon',
+    'footer.back_to_top': 'Retounen an wo',
+    
+    // Navigation
+    'nav.overview': 'Apèsi',
+    'nav.wealth': 'Richès',
+    'nav.hub': 'Sant',
+    'nav.trendcrypto': 'TrendCrypto',
+    'nav.lificosm': 'Lificosm',
+    'nav.forum': 'Fowòm',
+    'nav.profile': 'Pwofil',
+    
+    // Dashboard
+    'dashboard.components': 'KONPOZAN EKOSISTÈM',
+    'dashboard.pillars': 'TWAZAN PILYE',
+    'dashboard.impact': 'ENPAK KOMINOTE',
+    'dashboard.universal': 'ENPAK RICHÈS INIVÈSÈL',
+    'dashboard.impact.desc': 'Kreye pwosperite dirab nan kominote ki pa gen ase sèvis yo',
+    
+    // Platforms
+    'wealth.name': 'RICHÈS PA LKHN',
+    'wealth.description': 'Platfòm enklizyon finansye ak asistan AI ak konstriksyon kredi an 4 peman',
+    'hub.name': 'SANT LKHN',
+    'hub.description': 'Espas fizik pou kominote, kreyasyon ak edikasyon finansye',
+    'trendcrypto.name': 'LKHN TRENDCRYPTO',
+    'trendcrypto.description': 'Analiz crypto alimante AI ki konsantre sou XRP ak lajan kap monte',
+    
+    // Language selector
+    'language': 'Lang',
+  },
   ar: {
+    // Language names
+    'language.en': 'English',
+    'language.es': 'Español',
+    'language.fr': 'Français',
+    'language.ht': 'Kreyòl Ayisyen',
+    'language.zh': '中文',
+    'language.ja': '日本語',
+    'language.ru': 'Русский',
+    'language.xh': 'isiXhosa',
+    'language.ar': 'العربية',
+    
     // Common
     'app.name': 'الثروة العالمية LKHN',
     'app.tagline': 'نظام بيئي كمومي',

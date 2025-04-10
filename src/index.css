@@ -119,13 +119,65 @@
       transform: scaleY(0) rotate(0deg);
     }
   }
+  
+  /* Forum animations */
+  .forum-post-hover {
+    transition: transform 0.3s cubic-bezier(0.25, 0.1, 0.25, 1);
+  }
+  
+  .forum-post-hover:hover {
+    transform: translateY(-2px);
+  }
+  
+  .forum-category-active {
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .forum-category-active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 100%;
+    background: linear-gradient(90deg, rgba(201, 168, 97, 0) 0%, rgba(201, 168, 97, 1) 50%, rgba(201, 168, 97, 0) 100%);
+    animation: categoryPulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes categoryPulse {
+    0% {
+      opacity: 0.5;
+      width: 40%;
+      left: 30%;
+    }
+    50% {
+      opacity: 1;
+      width: 90%;
+      left: 5%;
+    }
+    100% {
+      opacity: 0.5;
+      width: 40%;
+      left: 30%;
+    }
+  }
+  
+  @keyframes shimmer {
+    0% {
+      background-position: -200% 0;
+    }
+    100% {
+      background-position: 200% 0;
+    }
+  }
 }
 
 /* Ensure dropdowns are always at the top */
 .language-dropdown,
 .notification-dropdown {
   position: relative;
-  z-index: 9999 !important;
+  z-index: 99999 !important;
 }
 
 body {
