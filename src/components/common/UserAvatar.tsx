@@ -1,6 +1,7 @@
 import React from 'react';
 import { User } from 'lucide-react';
-import { getUserAvatarSrc, AvatarStyle } from '../../utils/avatars';
+import InteractiveAvatar from './InteractiveAvatar';
+import { AvatarStyle } from '../../utils/avatars';
 
 interface UserAvatarProps {
   userId: string;
@@ -9,6 +10,8 @@ interface UserAvatarProps {
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
   style?: AvatarStyle;
   className?: string;
+  interactive?: boolean;
+  variant?: 'default' | 'gold' | 'light' | 'dark';
 }
 
 const UserAvatar: React.FC<UserAvatarProps> = ({
@@ -17,12 +20,23 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
   photoURL,
   size = 'md',
   style,
-  className = ''
+  className = '',
+  interactive = true,
+  variant
 }) => {
-  // Get the avatar source
-  const avatarSrc = getUserAvatarSrc(userId, displayName, photoURL, style);
+  // Map string sizes to pixel values
+  const sizeMap = {
+    'xs': 24,
+    'sm': 32,
+    'md': 40,
+    'lg': 64,
+    'xl': 96
+  };
   
-  // Determine size class
+  // Get numeric size
+  const numericSize = sizeMap[size];
+  
+  // Determine size class for backwards compatibility
   const sizeClass = {
     'xs': 'w-6 h-6 text-xs',
     'sm': 'w-8 h-8 text-sm',
@@ -31,25 +45,32 @@ const UserAvatar: React.FC<UserAvatarProps> = ({
     'xl': 'w-24 h-24 text-xl'
   }[size];
   
+  // Turn off interactivity for very small avatars
+  const useInteractive = interactive && size !== 'xs' && size !== 'sm';
+  
+  // Determine variant based on userId if not provided
+  // Use more sophisticated algorithm to ensure better distribution of variants
+  const determineVariant = () => {
+    if (variant) return variant;
+    
+    const hashCode = userId.split('').reduce((acc, char) => {
+      return acc + char.charCodeAt(0);
+    }, 0);
+    
+    const variants = ['default', 'gold', 'light', 'dark'];
+    return variants[hashCode % variants.length] as 'default' | 'gold' | 'light' | 'dark';
+  };
+  
   return (
-    <div className={`rounded-full overflow-hidden flex-shrink-0 ${sizeClass} ${className}`}>
-      {avatarSrc ? (
-        <img 
-          src={avatarSrc}
-          alt={displayName}
-          className="w-full h-full object-cover"
-          onError={(e) => {
-            // Fallback to User icon if image fails to load
-            e.currentTarget.style.display = 'none';
-            e.currentTarget.parentElement!.classList.add('bg-gray-700', 'flex', 'items-center', 'justify-center');
-          }}
-        />
-      ) : (
-        <div className="w-full h-full flex items-center justify-center bg-gray-700 text-gray-500">
-          <User size={size === 'xs' ? 12 : size === 'sm' ? 16 : size === 'md' ? 20 : size === 'lg' ? 32 : 48} />
-        </div>
-      )}
-    </div>
+    <InteractiveAvatar
+      userId={userId}
+      displayName={displayName}
+      photoURL={photoURL}
+      size={numericSize}
+      className={`flex-shrink-0 ${className}`}
+      interactive={useInteractive}
+      variant={determineVariant()}
+    />
   );
 };
 

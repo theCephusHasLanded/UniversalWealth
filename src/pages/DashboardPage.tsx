@@ -89,16 +89,19 @@ const DashboardPage: React.FC = () => {
 
   return (
     <div className="space-y-8">
-      <Card className="p-6">
+      <Card variant="glass" className="p-6 animate-slide-up">
         <div className="flex justify-between items-start mb-5">
           <div>
-            <h2 className="text-sm font-normal tracking-widest text-gray-400 uppercase">{t('app.name')}</h2>
-            <p className="text-white text-base mt-3 leading-relaxed">
+            <div className="flex items-center">
+              <div className="h-px w-8 bg-gold mr-2"></div>
+              <h2 className="text-sm font-normal tracking-widest text-gold uppercase">{t('app.name')}</h2>
+            </div>
+            <p className="text-neutral-200 text-base mt-3 leading-relaxed">
               {t('app.overview')}
             </p>
           </div>
-          <div className="w-12 h-12 rounded-full bg-gray-900 flex items-center justify-center">
-            <Globe size={24} className="text-white" />
+          <div className="w-12 h-12 bg-navy-700 border border-gold/30 flex items-center justify-center">
+            <Globe size={20} className="text-gold" />
           </div>
         </div>
         <Button
@@ -110,35 +113,42 @@ const DashboardPage: React.FC = () => {
         </Button>
       </Card>
 
-      <div>
-        <div className="flex justify-between mb-4">
-          <h2 className="text-xs font-normal tracking-widest text-gray-400 uppercase">{t('dashboard.components')}</h2>
-          <div className="text-xs text-gray-500 uppercase">{t('dashboard.pillars')}</div>
+      <div className="animate-slide-up" style={{ animationDelay: '0.1s' }}>
+        <div className="flex justify-between mb-6">
+          <div>
+            <h2 className="text-xs font-normal tracking-widest text-gold uppercase">{t('dashboard.components')}</h2>
+            <div className="h-px w-12 bg-gold/30 mt-2"></div>
+          </div>
+          <div className="text-xs text-neutral-400 uppercase tracking-widest">{t('dashboard.pillars')}</div>
         </div>
 
         <div className="space-y-4">
-        {platforms.map((platform) => (
-            <PlatformCard
-              key={platform.id}
-              name={platform.name}
-              description={platform.description}
-              color={platform.color}
-              metrics={platform.metrics}
-              onClick={() => window.dispatchEvent(new CustomEvent('setActiveTab', { detail: platform.id }))}
-            />
+        {platforms.map((platform, index) => (
+            <div key={platform.id} className="animate-slide-up" style={{ animationDelay: `${0.1 + (index * 0.05)}s` }}>
+              <PlatformCard
+                name={platform.name}
+                description={platform.description}
+                color={platform.color}
+                metrics={platform.metrics}
+                onClick={() => window.dispatchEvent(new CustomEvent('setActiveTab', { detail: platform.id }))}
+              />
+            </div>
           ))}
         </div>
       </div>
 
-      <div>
-        <div className="flex justify-between mb-4">
-          <h2 className="text-xs font-normal tracking-widest text-gray-400 uppercase">{t('dashboard.impact')}</h2>
+      <div className="animate-slide-up" style={{ animationDelay: '0.3s' }}>
+        <div className="flex justify-between mb-6">
+          <div>
+            <h2 className="text-xs font-normal tracking-widest text-gold uppercase">{t('dashboard.impact')}</h2>
+            <div className="h-px w-12 bg-gold/30 mt-2"></div>
+          </div>
         </div>
 
-        <Card>
-          <div className="mb-4">
-            <div className="text-sm uppercase tracking-wider">{t('dashboard.universal')}</div>
-            <div className="text-xs text-gray-400 mt-1">{t('dashboard.impact.desc')}</div>
+        <Card variant="bordered" hover>
+          <div className="mb-6">
+            <div className="text-sm uppercase tracking-wider text-white font-medium">{t('dashboard.universal')}</div>
+            <div className="text-xs text-neutral-400 mt-2">{t('dashboard.impact.desc')}</div>
           </div>
 
           <div className="grid grid-cols-2 gap-4">
@@ -147,6 +157,10 @@ const DashboardPage: React.FC = () => {
                 key={index}
                 label={metric.label}
                 value={metric.value}
+                color={index === 0 ? '#C9A861' : 
+                       index === 1 ? '#455E82' : 
+                       index === 2 ? '#8B7F62' : 
+                       '#2C2C2C'}
               />
             ))}
           </div>
@@ -154,7 +168,68 @@ const DashboardPage: React.FC = () => {
       </div>
 
       {showIntegrationModal && (
-        <IntegrationModal onClose={() => setShowIntegrationModal(false)} platforms={platforms} />
+        <div className="fixed inset-0 bg-navy-900/95 backdrop-blur-sm flex items-center justify-center p-4 z-50 animate-fade-in">
+          <div className="bg-navy-800 w-full max-w-lg border border-navy-700 shadow-xl p-6">
+            <div className="flex justify-between items-start mb-6">
+              <div>
+                <h3 className="text-sm tracking-wider uppercase text-gold">QUANTUM INTEGRATION</h3>
+                <div className="h-px w-16 bg-gold/30 mt-2"></div>
+              </div>
+              <button
+                onClick={() => setShowIntegrationModal(false)}
+                className="text-neutral-400 hover:text-gold transition-colors"
+              >
+                <X size={20} />
+              </button>
+            </div>
+
+            <p className="text-xs text-neutral-300 mb-6 leading-relaxed">
+              The true power of our ecosystem emerges through the seamless integration of these three pillars, creating a quantum effect where the whole is greater than the sum of its parts.
+            </p>
+
+            <div className="space-y-6 mb-8">
+              {integrations.map((integration, index) => (
+                <div key={index} className="bg-navy-700 p-4 border-l-2 border-gold/30 hover:border-gold transition-colors">
+                  <div className="flex justify-between items-start mb-3">
+                    <div className="text-sm uppercase tracking-wider text-white">{integration.title}</div>
+                    <div className="flex">
+                      {integration.platforms.map(platform => {
+                        const plat = platforms.find(p => p.id === platform);
+                        return (
+                          <div
+                            key={platform}
+                            className="w-3 h-3 ml-1"
+                            style={{ backgroundColor: plat?.color || '#888' }}
+                          ></div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                  <p className="text-xs text-neutral-300">{integration.description}</p>
+                </div>
+              ))}
+            </div>
+
+            <div className="pt-6 border-t border-navy-600">
+              <div className="text-center">
+                <h4 className="text-sm uppercase tracking-wider text-gold mb-2">{t('dashboard.universal')}</h4>
+                <p className="text-xs text-neutral-300 max-w-md mx-auto leading-relaxed">
+                  A new paradigm for wealth that integrates technological innovation with human connection, 
+                  curated experiences with democratized access, and exclusive insights with collective benefit.
+                </p>
+              </div>
+            </div>
+            
+            <div className="mt-8 flex justify-center">
+              <Button 
+                variant="outline"
+                onClick={() => setShowIntegrationModal(false)}
+              >
+                Continue Exploring
+              </Button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
