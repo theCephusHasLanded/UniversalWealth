@@ -16,8 +16,30 @@ const translations: Record<Language, Record<string, string>> = {
     // Common
     'app.name': 'LKHN UNIVERSAL WEALTH',
     'app.tagline': 'QUANTUM ECOSYSTEM',
-    'app.overview': 'A comprehensive ecosystem integrating digital finance, physical spaces, and AI-driven insights to create universal access to prosperity.',
-    'app.explore': 'EXPLORE QUANTUM INTEGRATION',
+    'app.overview': 'An exclusive ecosystem that redefines prosperity through avant-garde digital finance, curated spaces, and proprietary AI-driven insights.',
+    'app.explore': 'DISCOVER ELEVATED PROSPERITY',
+    'app.exclusive.heading': 'EXCLUSIVE INVESTMENT OPPORTUNITY',
+    'app.exclusive.subheading': 'Limited access wealth creation ecosystem',
+    'app.join': 'REQUEST MEMBERSHIP',
+    'app.access': 'ACCESS PLATFORM',
+    'app.exclusive.feature1': 'By invitation only',
+    'app.exclusive.feature2': 'Limited membership',
+    'app.exclusive.feature3': 'Curated investment opportunities',
+    'app.testimonials.heading': 'MEMBER EXPERIENCES',
+    'app.members.heading': 'MEMBERS-ONLY BENEFITS',
+    'app.testimonial1.quote': 'LKHN\'s exclusive approach to wealth building has accelerated my portfolio growth beyond what I thought possible. The AI insights are truly game-changing.',
+    'app.testimonial1.name': 'Alexandra M.',
+    'app.testimonial1.title': 'Angel Investor',
+    'app.testimonial2.quote': 'Having access to LKHN\'s curated opportunities has transformed my investment strategy. The physical Hub spaces create connections that simply aren\'t possible elsewhere.',
+    'app.testimonial2.name': 'Jackson W.',
+    'app.testimonial2.title': 'Family Office Manager',
+    'app.members.feature1.title': 'Private Investment Circles',
+    'app.members.feature1.desc': 'Exclusive access to pre-market opportunities and member-led investment pools for elevated capital access.',
+    'app.members.feature2.title': 'Invitation-Only Events',
+    'app.members.feature2.desc': 'Curated networking and educational gatherings with industry leaders and wealth visionaries.',
+    'app.members.feature3.title': 'Bespoke AI Analysis',
+    'app.members.feature3.desc': 'Personalized artificial intelligence tools calibrated to your specific wealth goals and risk tolerance.',
+    'app.invitecode.heading': 'Have an invitation code?',
     'common.save': 'Save',
     'common.saving': 'Saving...',
     'common.cancel': 'Cancel',
@@ -33,7 +55,25 @@ const translations: Record<Language, Record<string, string>> = {
     'common.close': 'Close',
     'common.confirm': 'Confirm',
     
+    // Notifications
+    'notifications.title': 'Notifications',
+    'notifications.empty': 'No new notifications',
+    'notifications.viewAll': 'View All Notifications',
+    
+    // Footer
+    'footer.copyright': 'All rights reserved',
+    'footer.legal': 'Legal',
+    'footer.privacy': 'Privacy Policy',
+    'footer.terms': 'Terms & Conditions',
+    'footer.cookies': 'Cookies',
+    'footer.contact': 'Contact',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'Book a Consultation',
+    'footer.back_to_top': 'Back to top',
+    
     // Navigation
+    'nav.home': 'Home',
     'nav.overview': 'Overview',
     'nav.wealth': 'Wealth',
     'nav.hub': 'Hub',
@@ -46,18 +86,37 @@ const translations: Record<Language, Record<string, string>> = {
     'dashboard.components': 'ECOSYSTEM COMPONENTS',
     'dashboard.pillars': 'THE THREE PILLARS',
     'dashboard.impact': 'COMMUNITY IMPACT',
-    'dashboard.universal': 'UNIVERSAL WEALTH IMPACT',
+    'dashboard.universal': 'UNIVERSAL WEALTH VISION',
     'dashboard.impact.desc': 'Creating sustainable prosperity across underserved communities',
     
     // Platforms
     'wealth.name': 'WEALTH BY LKHN',
-    'wealth.description': 'Financial inclusion platform with AI assistant and Pay-in-4 credit building',
+    'wealth.description': 'Exclusive financial ecosystem with proprietary AI and advanced credit-building strategies',
     'hub.name': 'LKHN HUB',
-    'hub.description': 'Physical spaces for community, creation, and financial education',
+    'hub.description': 'Curated members-only spaces for networking, creation, and financial mastery',
     'trendcrypto.name': 'LKHN TRENDCRYPTO',
-    'trendcrypto.description': 'AI-powered crypto analysis with focus on XRP and emerging coins',
+    'trendcrypto.description': 'Sophisticated crypto analysis with proprietary algorithms and early access opportunities',
     'lificosm.name': 'LIFICOSM',
-    'lificosm.description': 'Community-powered membership platform for neighborhood empowerment',
+    'lificosm.description': 'Member-exclusive community platform enabling collaborative prosperity creation',
+    
+    // Lificosm Events
+    'lificosm.events.title': 'Community Events',
+    'lificosm.events.subtitle': 'Exclusive gatherings for LKHN members',
+    'lificosm.events.all': 'All Categories',
+    'lificosm.events.education': 'Education',
+    'lificosm.events.culture': 'Culture',
+    'lificosm.events.community': 'Community',
+    'lificosm.events.attending': 'attending',
+    'lificosm.events.registered': 'Registered',
+    'lificosm.events.rsvp': 'RSVP',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'Community Marketplace',
+    'lificosm.marketplace.subtitle': 'Exchange goods and services with other members',
+    'lificosm.marketplace.newListing': 'New Listing',
+    'lificosm.marketplace.exchange': 'Exchange',
+    'lificosm.marketplace.forSale': 'For Sale',
+    'lificosm.marketplace.contact': 'Contact Seller',
     
     // Authentication
     'auth.login': 'Sign In',
@@ -174,6 +233,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': 'Un ecosistema integral que integra finanzas digitales, espacios físicos y perspectivas impulsadas por IA para crear acceso universal a la prosperidad.',
     'app.explore': 'EXPLORAR INTEGRACIÓN CUÁNTICA',
     
+    // Footer
+    'footer.copyright': 'Todos los derechos reservados',
+    'footer.legal': 'Legal',
+    'footer.privacy': 'Política de Privacidad',
+    'footer.terms': 'Términos y Condiciones',
+    'footer.cookies': 'Cookies',
+    'footer.contact': 'Contacto',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'Reservar una Consulta',
+    'footer.back_to_top': 'Volver arriba',
+    
     // Navigation
     'nav.overview': 'General',
     'nav.wealth': 'Riqueza',
@@ -195,6 +266,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': 'Espacios físicos para la comunidad, creación y educación financiera',
     'trendcrypto.name': 'LKHN TENDENCIACRIPTO',
     'trendcrypto.description': 'Análisis de criptomonedas impulsado por IA con enfoque en XRP y monedas emergentes',
+    
+    // Lificosm Events
+    'lificosm.events.title': 'Eventos de la Comunidad',
+    'lificosm.events.subtitle': 'Encuentros exclusivos para miembros de LKHN',
+    'lificosm.events.all': 'Todas las Categorías',
+    'lificosm.events.education': 'Educación',
+    'lificosm.events.culture': 'Cultura',
+    'lificosm.events.community': 'Comunidad',
+    'lificosm.events.attending': 'asistentes',
+    'lificosm.events.registered': 'Registrado',
+    'lificosm.events.rsvp': 'CONFIRMAR',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'Mercado Comunitario',
+    'lificosm.marketplace.subtitle': 'Intercambia bienes y servicios con otros miembros',
+    'lificosm.marketplace.newListing': 'Nuevo Anuncio',
+    'lificosm.marketplace.exchange': 'Intercambio',
+    'lificosm.marketplace.forSale': 'En Venta',
+    'lificosm.marketplace.contact': 'Contactar Vendedor',
     
     // Metrics
     'metric.users': 'Usuarios',
@@ -229,6 +319,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': 'Un écosystème complet intégrant la finance numérique, les espaces physiques et les perspectives basées sur l\'IA pour créer un accès universel à la prospérité.',
     'app.explore': 'EXPLORER L\'INTÉGRATION QUANTIQUE',
     
+    // Footer
+    'footer.copyright': 'Tous droits réservés',
+    'footer.legal': 'Mentions Légales',
+    'footer.privacy': 'Politique de Confidentialité',
+    'footer.terms': 'Conditions Générales',
+    'footer.cookies': 'Cookies',
+    'footer.contact': 'Contact',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'Réserver une Consultation',
+    'footer.back_to_top': 'Retour en haut',
+    
     // Navigation
     'nav.overview': 'Aperçu',
     'nav.wealth': 'Richesse',
@@ -250,6 +352,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': 'Espaces physiques pour la communauté, la création et l\'éducation financière',
     'trendcrypto.name': 'LKHN TENDANCECRYPTO',
     'trendcrypto.description': 'Analyse crypto alimentée par IA avec un accent sur XRP et les monnaies émergentes',
+
+    // Lificosm Events
+    'lificosm.events.title': 'Événements Communautaires',
+    'lificosm.events.subtitle': 'Rassemblements exclusifs pour les membres LKHN',
+    'lificosm.events.all': 'Toutes les Catégories',
+    'lificosm.events.education': 'Éducation',
+    'lificosm.events.culture': 'Culture',
+    'lificosm.events.community': 'Communauté',
+    'lificosm.events.attending': 'participants',
+    'lificosm.events.registered': 'Inscrit',
+    'lificosm.events.rsvp': 'RÉSERVER',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'Marché Communautaire',
+    'lificosm.marketplace.subtitle': 'Échangez des biens et services avec d\'autres membres',
+    'lificosm.marketplace.newListing': 'Nouvelle Annonce',
+    'lificosm.marketplace.exchange': 'Échange',
+    'lificosm.marketplace.forSale': 'À Vendre',
+    'lificosm.marketplace.contact': 'Contacter le Vendeur',
     
     // Metrics
     'metric.users': 'Utilisateurs',
@@ -284,6 +405,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': '一个全面的生态系统，整合数字金融、实体空间和人工智能驱动的洞察，创造普遍的繁荣机会。',
     'app.explore': '探索量子整合',
     
+    // Footer
+    'footer.copyright': '版权所有',
+    'footer.legal': '法律信息',
+    'footer.privacy': '隐私政策',
+    'footer.terms': '条款和条件',
+    'footer.cookies': 'Cookies',
+    'footer.contact': '联系我们',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': '预约咨询',
+    'footer.back_to_top': '返回顶部',
+    
     // Navigation
     'nav.overview': '概览',
     'nav.wealth': '财富',
@@ -305,6 +438,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': '为社区、创造和金融教育提供的实体空间',
     'trendcrypto.name': 'LKHN 趋势加密',
     'trendcrypto.description': '由人工智能驱动的加密分析，专注于XRP和新兴币种',
+
+    // Lificosm Events
+    'lificosm.events.title': '社区活动',
+    'lificosm.events.subtitle': 'LKHN会员专属聚会',
+    'lificosm.events.all': '所有类别',
+    'lificosm.events.education': '教育',
+    'lificosm.events.culture': '文化',
+    'lificosm.events.community': '社区',
+    'lificosm.events.attending': '参与者',
+    'lificosm.events.registered': '已注册',
+    'lificosm.events.rsvp': '预约',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': '社区市场',
+    'lificosm.marketplace.subtitle': '与其他会员交换商品和服务',
+    'lificosm.marketplace.newListing': '新上架',
+    'lificosm.marketplace.exchange': '交换',
+    'lificosm.marketplace.forSale': '待售',
+    'lificosm.marketplace.contact': '联系卖家',
     
     // Metrics
     'metric.users': '用户',
@@ -339,6 +491,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': 'デジタル金融、物理的空間、AIによる洞察を統合し、すべての人に繁栄へのアクセスを創出する包括的なエコシステム。',
     'app.explore': '量子統合を探索する',
     
+    // Footer
+    'footer.copyright': '無断複製禁止',
+    'footer.legal': '法的情報',
+    'footer.privacy': 'プライバシーポリシー',
+    'footer.terms': '利用規約',
+    'footer.cookies': 'Cookie',
+    'footer.contact': 'お問い合わせ',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': '相談予約',
+    'footer.back_to_top': 'トップに戻る',
+    
     // Navigation
     'nav.overview': '概要',
     'nav.wealth': 'ウェルス',
@@ -360,6 +524,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': 'コミュニティ、創造、金融教育のための物理的空間',
     'trendcrypto.name': 'LKHN トレンドクリプト',
     'trendcrypto.description': 'XRPと新興コインに焦点を当てたAIパワー暗号分析',
+
+    // Lificosm Events
+    'lificosm.events.title': 'コミュニティイベント',
+    'lificosm.events.subtitle': 'LKHNメンバー限定の集まり',
+    'lificosm.events.all': 'すべてのカテゴリー',
+    'lificosm.events.education': '教育',
+    'lificosm.events.culture': '文化',
+    'lificosm.events.community': 'コミュニティ',
+    'lificosm.events.attending': '参加者',
+    'lificosm.events.registered': '登録済み',
+    'lificosm.events.rsvp': '予約する',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'コミュニティマーケット',
+    'lificosm.marketplace.subtitle': '他のメンバーと商品やサービスを交換する',
+    'lificosm.marketplace.newListing': '新規出品',
+    'lificosm.marketplace.exchange': '交換',
+    'lificosm.marketplace.forSale': '販売中',
+    'lificosm.marketplace.contact': '出品者に連絡',
     
     // Metrics
     'metric.users': 'ユーザー',
@@ -394,6 +577,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': 'Комплексная экосистема, интегрирующая цифровые финансы, физические пространства и аналитику на базе ИИ для создания всеобщего доступа к процветанию.',
     'app.explore': 'ИССЛЕДОВАТЬ КВАНТОВУЮ ИНТЕГРАЦИЮ',
     
+    // Footer
+    'footer.copyright': 'Все права защищены',
+    'footer.legal': 'Правовая информация',
+    'footer.privacy': 'Политика конфиденциальности',
+    'footer.terms': 'Условия использования',
+    'footer.cookies': 'Cookies',
+    'footer.contact': 'Контакты',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'Записаться на консультацию',
+    'footer.back_to_top': 'Наверх',
+    
     // Navigation
     'nav.overview': 'Обзор',
     'nav.wealth': 'Богатство',
@@ -415,6 +610,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': 'Физические пространства для сообщества, творчества и финансового образования',
     'trendcrypto.name': 'LKHN ТРЕНДКРИПТО',
     'trendcrypto.description': 'Криптоанализ на базе ИИ с фокусом на XRP и новые монеты',
+
+    // Lificosm Events
+    'lificosm.events.title': 'Мероприятия Сообщества',
+    'lificosm.events.subtitle': 'Эксклюзивные встречи для членов LKHN',
+    'lificosm.events.all': 'Все Категории',
+    'lificosm.events.education': 'Образование',
+    'lificosm.events.culture': 'Культура',
+    'lificosm.events.community': 'Сообщество',
+    'lificosm.events.attending': 'участников',
+    'lificosm.events.registered': 'Зарегистрирован',
+    'lificosm.events.rsvp': 'РЕГИСТРАЦИЯ',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'Маркетплейс Сообщества',
+    'lificosm.marketplace.subtitle': 'Обменивайтесь товарами и услугами с другими участниками',
+    'lificosm.marketplace.newListing': 'Новое Объявление',
+    'lificosm.marketplace.exchange': 'Обмен',
+    'lificosm.marketplace.forSale': 'Продажа',
+    'lificosm.marketplace.contact': 'Связаться с Продавцом',
     
     // Metrics
     'metric.users': 'Пользователи',
@@ -449,6 +663,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': 'Inkqubo epheleleyo ehlanganisa iimali ezidijithali, iindawo zesiqhelo kunye nezinto ezikhokhelwe yi-AI ukudala ukufikelela jikelele kuphuhliso.',
     'app.explore': 'HLOLA UMASILINGANE WEQUANTUM',
     
+    // Footer
+    'footer.copyright': 'Onke amalungelo agciniwe',
+    'footer.legal': 'Esemthethweni',
+    'footer.privacy': 'Umgaqo-nkqubo Wabucala',
+    'footer.terms': 'Imiqathango',
+    'footer.cookies': 'Cookies',
+    'footer.contact': 'Qhagamshelana',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'Buka iNgcebiso',
+    'footer.back_to_top': 'Buyela phezulu',
+    
     // Navigation
     'nav.overview': 'Inkcazelo',
     'nav.wealth': 'Ubutyebi',
@@ -470,6 +696,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': 'Iindawo ezibonakalayo zoluntu, ukuyila kunye nemfundo yezemali',
     'trendcrypto.name': 'LKHN CRYPTO EHAMBAYO',
     'trendcrypto.description': 'Uhlalutyo lwe-crypto olukhokhelwe yi-AI olugxininisa ku-XRP kunye neekhoyini eziphuhlikayo',
+
+    // Lificosm Events
+    'lificosm.events.title': 'Iziganeko zoLuntu',
+    'lificosm.events.subtitle': 'Iintlanganiso ezikhethekileyo zamalungu e-LKHN',
+    'lificosm.events.all': 'Zonke iiKhathegori',
+    'lificosm.events.education': 'IMfundo',
+    'lificosm.events.culture': 'INkcubeko',
+    'lificosm.events.community': 'ULuntu',
+    'lificosm.events.attending': 'abazimasi',
+    'lificosm.events.registered': 'Ubhalisile',
+    'lificosm.events.rsvp': 'BHALA',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'IMarike yoLuntu',
+    'lificosm.marketplace.subtitle': 'Tshintshiselana ngeempahla neenkonzo namanye amalungu',
+    'lificosm.marketplace.newListing': 'Ukubhengeza Okutsha',
+    'lificosm.marketplace.exchange': 'Ukutshintshisana',
+    'lificosm.marketplace.forSale': 'Ethengiswa',
+    'lificosm.marketplace.contact': 'Qhagamshelana noMthengisi',
     
     // Metrics
     'metric.users': 'Abasebenzisi',
@@ -504,6 +749,18 @@ const translations: Record<Language, Record<string, string>> = {
     'app.overview': 'نظام بيئي شامل يدمج التمويل الرقمي والمساحات المادية والرؤى المدعومة بالذكاء الاصطناعي لإنشاء وصول عالمي للازدهار.',
     'app.explore': 'استكشاف التكامل الكمومي',
     
+    // Footer
+    'footer.copyright': 'جميع الحقوق محفوظة',
+    'footer.legal': 'قانوني',
+    'footer.privacy': 'سياسة الخصوصية',
+    'footer.terms': 'الشروط والأحكام',
+    'footer.cookies': 'ملفات تعريف الارتباط',
+    'footer.contact': 'اتصل بنا',
+    'footer.email': 'info@lkhn.com',
+    'footer.phone': '+1 (555) 123-4567',
+    'footer.consultation': 'حجز استشارة',
+    'footer.back_to_top': 'العودة إلى الأعلى',
+    
     // Navigation
     'nav.overview': 'نظرة عامة',
     'nav.wealth': 'الثروة',
@@ -525,6 +782,25 @@ const translations: Record<Language, Record<string, string>> = {
     'hub.description': 'مساحات مادية للمجتمع والإبداع والتعليم المالي',
     'trendcrypto.name': 'اتجاه العملات المشفرة LKHN',
     'trendcrypto.description': 'تحليل للعملات المشفرة مدعوم بالذكاء الاصطناعي مع التركيز على XRP والعملات الناشئة',
+
+    // Lificosm Events
+    'lificosm.events.title': 'فعاليات المجتمع',
+    'lificosm.events.subtitle': 'لقاءات حصرية لأعضاء LKHN',
+    'lificosm.events.all': 'جميع الفئات',
+    'lificosm.events.education': 'التعليم',
+    'lificosm.events.culture': 'الثقافة',
+    'lificosm.events.community': 'المجتمع',
+    'lificosm.events.attending': 'الحضور',
+    'lificosm.events.registered': 'مسجل',
+    'lificosm.events.rsvp': 'تأكيد الحضور',
+    
+    // Lificosm Marketplace
+    'lificosm.marketplace.title': 'سوق المجتمع',
+    'lificosm.marketplace.subtitle': 'تبادل السلع والخدمات مع الأعضاء الآخرين',
+    'lificosm.marketplace.newListing': 'إعلان جديد',
+    'lificosm.marketplace.exchange': 'تبادل',
+    'lificosm.marketplace.forSale': 'للبيع',
+    'lificosm.marketplace.contact': 'التواصل مع البائع',
     
     // Metrics
     'metric.users': 'المستخدمون',

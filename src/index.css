@@ -5,6 +5,129 @@
 /* Import custom animations */
 @import './components/animations/animations.css';
 
+@layer utilities {
+  .text-2xs {
+    font-size: 0.7rem;
+  }
+  
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in-out forwards;
+  }
+  
+  .animate-blink {
+    animation: blink 300ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  .animate-double-blink {
+    animation: doubleBlink 700ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  .animate-squint {
+    animation: squint 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  .animate-squint-bottom {
+    animation: squintBottom 1500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  .animate-wink {
+    animation: wink 500ms cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+  
+  @keyframes blink {
+    0% {
+      transform: scaleY(0);
+    }
+    50% {
+      transform: scaleY(1);
+    }
+    100% {
+      transform: scaleY(0);
+    }
+  }
+  
+  @keyframes doubleBlink {
+    0% {
+      transform: scaleY(0);
+    }
+    30% {
+      transform: scaleY(1);
+    }
+    45% {
+      transform: scaleY(0);
+    }
+    60% {
+      transform: scaleY(1);
+    }
+    100% {
+      transform: scaleY(0);
+    }
+  }
+  
+  @keyframes squint {
+    0% {
+      transform: scaleY(0);
+    }
+    15% {
+      transform: scaleY(0.5);
+    }
+    85% {
+      transform: scaleY(0.5);
+    }
+    100% {
+      transform: scaleY(0);
+    }
+  }
+  
+  @keyframes squintBottom {
+    0% {
+      transform: scaleY(0);
+    }
+    15% {
+      transform: scaleY(0.4);
+    }
+    85% {
+      transform: scaleY(0.4);
+    }
+    100% {
+      transform: scaleY(0);
+    }
+  }
+  
+  @keyframes wink {
+    0% {
+      transform: scaleY(0) rotate(0deg);
+    }
+    15% {
+      transform: scaleY(1) rotate(-3deg);
+    }
+    85% {
+      transform: scaleY(1) rotate(-3deg);
+    }
+    100% {
+      transform: scaleY(0) rotate(0deg);
+    }
+  }
+}
+
+/* Ensure dropdowns are always at the top */
+.language-dropdown,
+.notification-dropdown {
+  position: relative;
+  z-index: 9999 !important;
+}
+
 body {
   margin: 0;
   background-color: black;

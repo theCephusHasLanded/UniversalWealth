@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useAuth } from './AuthContext';
 import { useTranslation } from '../contexts/TranslationContext';
 import { ArrowRight, Mail, Lock, AlertCircle, User } from 'lucide-react';
+import EyeLogo from '../components/common/EyeLogo';
 
 type AuthMode = 'login' | 'signup' | 'forgot';
 
@@ -107,17 +108,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onBackToLanding }) => 
         
         {/* Logo */}
         <div className="flex items-center mb-8">
-          <div className="h-10 w-10 mr-4 bg-gradient-to-br from-green-500 to-blue-500 rounded-sm flex items-center justify-center">
-            <span className="text-lg font-bold text-white">LKHN</span>
+          <div className="h-12 w-12 mr-4 bg-navy-800 border border-gold/50 rounded-full flex items-center justify-center overflow-hidden">
+            <EyeLogo size={40} variant="gold" expressiveness="high" />
           </div>
           <div>
             <div className="flex items-center mb-1">
-              <div className="h-0.5 w-6 bg-white mr-2"></div>
-              <span className="text-xs uppercase tracking-widest">Universal</span>
+              <div className="h-0.5 w-6 bg-gold mr-2"></div>
+              <span className="text-xs uppercase tracking-widest text-white">LKHN</span>
             </div>
-            <h1 className="text-xl font-normal tracking-widest uppercase">
-              WEALTH
-            </h1>
+            <div className="flex items-center">
+              <h1 className="text-xl font-normal tracking-widest uppercase text-white">
+                Universal Wealth
+              </h1>
+            </div>
           </div>
         </div>
         

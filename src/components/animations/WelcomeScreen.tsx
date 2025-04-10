@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../../auth/AuthContext';
+import InteractiveBackground from './InteractiveBackground';
+import EyeLogo from '../common/EyeLogo';
 
 interface WelcomeScreenProps {
   onComplete: () => void;
@@ -7,18 +9,19 @@ interface WelcomeScreenProps {
 
 const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   const { currentUser } = useAuth();
-  const userName = currentUser?.displayName || 'Investor';
+  const userName = currentUser?.displayName || 'Member';
   
-  const [showWelcome, setShowWelcome] = useState(false);
-  const [showUser, setShowUser] = useState(false);
-  const [showSystem, setShowSystem] = useState(false);
+  const [step, setStep] = useState(0);
+  const [showExclusive, setShowExclusive] = useState(false);
   
+  // Animation timeline
   useEffect(() => {
     const timeline = [
-      { action: () => setShowWelcome(true), delay: 500 },
-      { action: () => setShowUser(true), delay: 1500 },
-      { action: () => setShowSystem(true), delay: 2500 },
-      { action: onComplete, delay: 4000 }
+      { action: () => setStep(1), delay: 500 }, // Welcome
+      { action: () => setStep(2), delay: 1000 }, // User name
+      { action: () => setStep(3), delay: 800 }, // System name
+      { action: () => setShowExclusive(true), delay: 1000 }, // Show exclusive features
+      { action: onComplete, delay: 2500 } // Complete
     ];
     
     let timeouts: NodeJS.Timeout[] = [];
@@ -33,83 +36,89 @@ const WelcomeScreen: React.FC<WelcomeScreenProps> = ({ onComplete }) => {
   }, [onComplete]);
   
   return (
-    <div className="fixed inset-0 z-50 bg-black flex flex-col items-center justify-center overflow-hidden">
-      {/* Animated background */}
+    <div className="fixed inset-0 z-50 bg-navy-900 flex flex-col items-center justify-center overflow-hidden">
+      {/* Sophisticated background */}
       <div className="absolute inset-0 overflow-hidden">
-        {/* Stars background */}
-        <div className="absolute inset-0">
-          {[...Array(100)].map((_, i) => (
-            <div
+        <InteractiveBackground variant="exclusive" />
+        <div className="absolute inset-0 bg-gradient-to-b from-navy-900/70 via-navy-900/60 to-navy-900/80 z-10"></div>
+      </div>
+      
+      {/* Center content */}
+      <div className="relative z-20 text-center px-6 max-w-lg">
+        {/* Welcome message with staggered reveal */}
+        <div className="mb-8">
+          {step >= 1 && (
+            <div className="h-24 w-24 mx-auto bg-navy-800 border border-gold/30 rounded-full flex items-center justify-center shadow-xl animate-fade-in mb-6 overflow-hidden">
+              <EyeLogo size={80} variant="gold" expressiveness="high" />
+            </div>
+          )}
+          
+          {step >= 2 && (
+            <div 
+              className="text-2xl text-gold font-serif italic mb-2 animate-fade-in"
+              style={{ animationDelay: '0.1s' }}
+            >
+              Welcome back,
+            </div>
+          )}
+          
+          {step >= 2 && (
+            <div 
+              className="text-3xl font-medium text-white tracking-wide animate-fade-in"
+              style={{ animationDelay: '0.2s' }}
+            >
+              {userName}
+            </div>
+          )}
+          
+          {step >= 3 && (
+            <div 
+              className="mt-4 text-sm text-neutral-300 uppercase tracking-widest animate-fade-in"
+              style={{ animationDelay: '0.3s' }}
+            >
+              Your exclusive access to LKHN Universal Wealth
+            </div>
+          )}
+        </div>
+        
+        {/* Exclusive features teaser */}
+        {showExclusive && (
+          <div className="animate-fade-in" style={{ animationDelay: '0.4s' }}>
+            <div className="grid grid-cols-3 gap-4 mb-8">
+              {['Wealth Analytics', 'Private Markets', 'Member Events'].map((feature, i) => (
+                <div 
+                  key={i} 
+                  className="animate-slide-up p-3 bg-navy-700/50 border border-navy-600"
+                  style={{ animationDelay: `${0.5 + (i * 0.1)}s` }}
+                >
+                  <div className="h-px w-6 bg-gold/50 mx-auto mb-4"></div>
+                  <div className="text-xs text-neutral-200 uppercase tracking-wider">{feature}</div>
+                </div>
+              ))}
+            </div>
+            
+            <div 
+              className="text-xs text-gold-300 animate-fade-in opacity-0"
+              style={{ animationDelay: '1s', animationFillMode: 'forwards' }}
+            >
+              Preparing your personalized dashboard...
+            </div>
+          </div>
+        )}
+      </div>
+      
+      {/* Bottom status indicators */}
+      <div className="absolute bottom-10 left-0 right-0 flex justify-center z-20">
+        <div className="flex space-x-4">
+          {[...Array(4)].map((_, i) => (
+            <div 
               key={i}
-              className="absolute rounded-full bg-white"
-              style={{
-                width: `${Math.random() * 2 + 1}px`,
-                height: `${Math.random() * 2 + 1}px`,
-                top: `${Math.random() * 100}%`,
-                left: `${Math.random() * 100}%`,
-                opacity: Math.random() * 0.7 + 0.3,
-                animation: `twinkle ${Math.random() * 5 + 3}s infinite alternate`
-              }}
+              className={`h-1 w-1 rounded-full transition-all duration-500 ${
+                step > i ? 'bg-gold' : 'bg-navy-600'
+              }`}
             />
           ))}
         </div>
-        
-        {/* Planet sphere */}
-        <div
-          className="absolute rounded-full bg-gradient-to-br from-blue-900 to-indigo-900"
-          style={{
-            width: '300px',
-            height: '300px',
-            bottom: '-100px',
-            right: '-100px',
-            filter: 'blur(40px)',
-            opacity: 0.4
-          }}
-        />
-        
-        {/* Glowing sphere */}
-        <div
-          className="absolute rounded-full bg-gradient-to-tr from-purple-600 to-blue-600"
-          style={{
-            width: '200px',
-            height: '200px',
-            top: '20%',
-            left: '10%',
-            filter: 'blur(60px)',
-            opacity: 0.2,
-            animation: 'float 20s infinite alternate ease-in-out'
-          }}
-        />
-      </div>
-      
-      {/* Welcome messages */}
-      <div className="z-10 flex flex-col items-center justify-center space-y-6">
-        {showWelcome && (
-          <div 
-            className="text-4xl font-bold text-white tracking-wider opacity-0 animate-fadeIn"
-            style={{ animationDelay: '0s', animationFillMode: 'forwards' }}
-          >
-            WELCOME
-          </div>
-        )}
-        
-        {showUser && (
-          <div 
-            className="text-3xl font-medium text-green-500 tracking-wide opacity-0 animate-fadeIn"
-            style={{ animationDelay: '0.5s', animationFillMode: 'forwards' }}
-          >
-            {userName}
-          </div>
-        )}
-        
-        {showSystem && (
-          <div 
-            className="text-xl text-blue-400 tracking-widest uppercase opacity-0 animate-fadeIn"
-            style={{ animationDelay: '1s', animationFillMode: 'forwards' }}
-          >
-            TO LKHN UNIVERSAL WEALTH
-          </div>
-        )}
       </div>
     </div>
   );
