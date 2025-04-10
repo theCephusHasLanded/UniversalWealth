@@ -1,4 +1,5 @@
-![20250405_2307_Futuristic Tech Sanctuary Diorama_simple_compose_01jr4h1nwde9y9ynx57n7s6cf3](https://github.com/user-attachments/assets/a6f3c8bf-03de-44a3-88da-4ab3617f6ba5)
+![20250407_2259_Next-Level Tech Ecosystem_remix_01jr9ndbcfeybr9mwxvh7wzbhe](https://github.com/user-attachments/assets/a4646fe1-cbe0-405f-9caf-c6f19a9d6a6c)
+
 
 # LKHN Universal Wealth Platform
 
@@ -9,6 +10,8 @@ A comprehensive ecosystem integrating digital finance, physical spaces, AI-drive
 - **Multi-language Support**: Includes English, Spanish, French, Chinese, Japanese, Russian, Xhosa, and Arabic with full RTL support.
 - **Responsive Design**: Mobile-first interface built with Tailwind CSS.
 - **Component Ecosystem**: Various pillars of the LKHN platform within a unified interface.
+
+![20250409_2350_Skyline Office View_remix_01jrex41cgfrt8xs77pm57d36c](https://github.com/user-attachments/assets/aeb8d879-f4ee-409d-b0a5-4d1f1eb03e11)
 
 ### Core Modules
 
@@ -92,7 +95,7 @@ npm run build
 A new paradigm for wealth that is distributed rather than concentrated, communal rather than individualistic, and inclusive by design rather than as an afterthought.
 
 ## Screenshots
-<img width="420" alt="Screenshot 2025-04-05 at 10 59 13 PM" src="https://github.com/user-attachments/assets/10bb20c6-baf3-459d-80d1-dd3e5557e37f" />
+<img width="458" alt="Screenshot 2025-04-09 at 11 55 24 PM" src="https://github.com/user-attachments/assets/e115cb3a-3ad6-4086-ac21-b7f506cee700" />
 
 ---
 
