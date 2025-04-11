@@ -1,5 +1,4 @@
-![20250407_2259_Next-Level Tech Ecosystem_remix_01jr9ndbcfeybr9mwxvh7wzbhe](https://github.com/user-attachments/assets/a4646fe1-cbe0-405f-9caf-c6f19a9d6a6c)
-
+![20250406_0056_Retro Macintosh Interface Nostalgia_simple_compose_01jr4q9bnce4fb0hc5nnn0apws](https://github.com/user-attachments/assets/37a7af3b-cdd2-4242-8fc2-f5b29d0bea85)
 
 # LKHN Universal Wealth Platform
 
