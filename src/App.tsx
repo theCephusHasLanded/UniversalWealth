@@ -1,27 +1,27 @@
 import React, { useState, useEffect } from 'react';
-import Layout from './components/layout/Layout';
-import Dashboard from './pages/DashboardPage';
-import WealthPage from './pages/WealthPage';
-import HubPage from './pages/HubPage';
-import TrendCryptoPage from './pages/TrendCryptoPage';
-import LificosmPage from './pages/LificosmPage';
-import ForumPage from './pages/ForumPage';
-import LandingPage from './pages/LandingPage';
-import ProfilePage from './pages/ProfilePage';
-import MembershipPage from './pages/MembershipPage';
-import LoginPage from './auth/LoginPage';
+import { useLocation } from 'react-router-dom';
 import { AuthProvider } from './auth/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import { WealthProvider } from './contexts/WealthContext';
-import ProtectedRoute from './auth/ProtectedRoute';
+import AppRoutes from './routes';
 import ThreeJsLoader from './components/animations/ThreeJsLoader';
 import WelcomeScreen from './components/animations/WelcomeScreen';
 import CookieConsent from './components/common/CookieConsent';
 import FeedbackButton from './components/common/FeedbackButton';
+import HubPage from './pages/HubPage';
+import TrendCryptoPage from './pages/TrendCryptoPage';
+import LificosmPage from './pages/LificosmPage';
+import Dashboard from './pages/DashboardPage';
+import ForumPage from './pages/ForumPage';
+import ProfilePage from './pages/ProfilePage';
+import MembershipPage from './pages/MembershipPage';
+import WealthPage from './pages/WealthPage';
+import Layout from './components/layout/Layout';
 
 function App() {
-  const [showLanding, setShowLanding] = useState(true);
-  const [activeTab, setActiveTab] = useState('invite');
+  const location = useLocation();
+  const [showLanding, setShowLanding] = useState(location.pathname === '/landing');
+  const [activeTab, setActiveTab] = useState('overview');
   const [isLoading, setIsLoading] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
   const [showWelcome, setShowWelcome] = useState(false);
@@ -90,6 +90,8 @@ function App() {
   };
 
   // Application main content that requires authentication
+  // Note: This component is not being used since the router handles the layout now
+  // Keeping it for reference
   const AuthenticatedApp = () => (
     <Layout activeTab={activeTab} setActiveTab={setActiveTab}>
       {activeTab === 'invite' && <MembershipPage />}
@@ -129,54 +131,38 @@ function App() {
   };
   
   return (
-    <AuthProvider>
-      <UserProvider>
-        {/* Three.js loading animation overlays everything else when active */}
-        {isLoading && (
-          <ThreeJsLoader 
-            onComplete={handleLoadingComplete} 
-            progress={loadingProgress} 
-          />
-        )}
-        
-        {/* Welcome screen shown after successful login */}
-        {showWelcome && (
-          <WelcomeScreen onComplete={handleWelcomeComplete} />
-        )}
-        
-        {showLanding && !isLoading ? (
-          <LandingPage 
-            onGetStarted={handleGetStarted} 
-            onSignIn={handleSignIn} 
-          />
-        ) : showLogin && !showWelcome ? (
-          <LoginPage 
-            onSuccess={handleLoginSuccess}
-            onBackToLanding={() => {
-              setShowLogin(false);
-              setShowLanding(true);
-            }}
-          />
-        ) : !showWelcome ? (
-          <ProtectedRoute 
-            fallback={<LoginPage onSuccess={handleLoginSuccess} />}
-          >
-            <AuthenticatedApp />
-            
-            {/* Feedback button only shown in the authenticated app */}
-            <FeedbackButton onSubmit={handleFeedbackSubmit} />
-          </ProtectedRoute>
-        ) : null}
-        
-        {/* Cookie consent banner */}
-        {showCookieConsent && (
-          <CookieConsent 
-            onAccept={handleCookieConsent} 
-            onDecline={handleCookieConsent} 
-          />
-        )}
-      </UserProvider>
-    </AuthProvider>
+    <>
+      <AuthProvider>
+        <UserProvider>
+          {/* Three.js loading animation overlays everything else when active */}
+          {isLoading && (
+            <ThreeJsLoader 
+              onComplete={handleLoadingComplete} 
+              progress={loadingProgress} 
+            />
+          )}
+          
+          {/* Welcome screen shown after successful login */}
+          {showWelcome && (
+            <WelcomeScreen onComplete={handleWelcomeComplete} />
+          )}
+          
+          {/* Main application routes */}
+          <AppRoutes />
+          
+          {/* Feedback button */}
+          <FeedbackButton onSubmit={handleFeedbackSubmit} />
+          
+          {/* Cookie consent banner */}
+          {showCookieConsent && (
+            <CookieConsent 
+              onAccept={handleCookieConsent} 
+              onDecline={handleCookieConsent} 
+            />
+          )}
+        </UserProvider>
+      </AuthProvider>
+    </>
   );
 }
 
