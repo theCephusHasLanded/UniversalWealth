@@ -66,9 +66,8 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onBackToLanding }) => 
       onSuccess();
     } catch (err: any) {
       setError(err?.message || 'Failed to sign in with Google.');
+      setLoading(false);
     }
-    
-    setLoading(false);
   };
 
   const handleResetPassword = async (e: React.FormEvent) => {

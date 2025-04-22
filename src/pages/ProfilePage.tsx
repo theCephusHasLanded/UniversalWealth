@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { 
-  User, 
-  Edit, 
-  Calendar, 
-  MapPin, 
-  Globe, 
-  Mail, 
-  Phone, 
-  Shield, 
+import {
+  User,
+  Edit,
+  Calendar,
+  MapPin,
+  Globe,
+  Mail,
+  Phone,
+  Shield,
   Award,
   MessageCircle,
   UserPlus,
@@ -33,19 +33,19 @@ interface ProfileTabsProps {
 
 const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab, isCurrentUser }) => {
   const { t } = useTranslation();
-  
+
   return (
     <div className="mb-6">
       <div className="flex items-center mb-2">
         <div className="h-px w-6 bg-gold mr-2"></div>
         <h2 className="text-sm font-normal tracking-widest text-gold uppercase">{t('profile.profile') || 'PROFILE'}</h2>
       </div>
-    
+
       <div className="flex flex-wrap border-b border-navy-700 overflow-x-auto whitespace-nowrap max-w-full">
         <button
           className={`px-3 sm:px-4 py-2 text-xs sm:text-sm uppercase tracking-wider ${
-            activeTab === 'overview' 
-              ? 'border-b-2 border-gold text-white' 
+            activeTab === 'overview'
+              ? 'border-b-2 border-gold text-white'
               : 'text-neutral-400 hover:text-neutral-200 transition-colors'
           }`}
           onClick={() => setActiveTab('overview')}
@@ -54,8 +54,8 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab, isCu
         </button>
         <button
           className={`px-3 sm:px-4 py-2 text-xs sm:text-sm uppercase tracking-wider ${
-            activeTab === 'activity' 
-              ? 'border-b-2 border-gold text-white' 
+            activeTab === 'activity'
+              ? 'border-b-2 border-gold text-white'
               : 'text-neutral-400 hover:text-neutral-200 transition-colors'
           }`}
           onClick={() => setActiveTab('activity')}
@@ -65,8 +65,8 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab, isCu
         {isCurrentUser && (
           <button
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm uppercase tracking-wider ${
-              activeTab === 'connections' 
-                ? 'border-b-2 border-gold text-white' 
+              activeTab === 'connections'
+                ? 'border-b-2 border-gold text-white'
                 : 'text-neutral-400 hover:text-neutral-200 transition-colors'
             }`}
             onClick={() => setActiveTab('connections')}
@@ -77,8 +77,8 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab, isCu
         {isCurrentUser && (
           <button
             className={`px-3 sm:px-4 py-2 text-xs sm:text-sm uppercase tracking-wider ${
-              activeTab === 'settings' 
-                ? 'border-b-2 border-gold text-white' 
+              activeTab === 'settings'
+                ? 'border-b-2 border-gold text-white'
                 : 'text-neutral-400 hover:text-neutral-200 transition-colors'
             }`}
             onClick={() => setActiveTab('settings')}
@@ -94,9 +94,9 @@ const ProfileTabs: React.FC<ProfileTabsProps> = ({ activeTab, setActiveTab, isCu
 const ProfileOverview: React.FC = () => {
   const { userProfile } = useUser();
   const { t } = useTranslation();
-  
+
   if (!userProfile) return null;
-  
+
   return (
     <div className="grid grid-cols-1 md:grid-cols-3 gap-6 w-full">
       <div className="md:col-span-2 w-full">
@@ -105,16 +105,16 @@ const ProfileOverview: React.FC = () => {
           <div className="absolute top-0 right-0 opacity-5 pointer-events-none">
             <EyeLogo size={128} variant="gold" expressiveness="low" />
           </div>
-          
+
           <div className="flex items-center mb-4">
             <div className="h-px w-6 bg-gold/50 mr-2"></div>
             <h3 className="text-sm uppercase tracking-wider text-gold/80">{t('profile.about')}</h3>
           </div>
-          
+
           <p className="text-neutral-300 mb-6 relative z-10">
             {userProfile.bio || t('profile.noBio')}
           </p>
-          
+
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {userProfile.location && (
               <div className="flex items-center text-neutral-400">
@@ -159,7 +159,7 @@ const ProfileOverview: React.FC = () => {
                 <Shield size={14} className="text-gold/70" />
               </div>
               <span>
-                {userProfile.roles.includes(UserRole.ADMIN) 
+                {userProfile.roles.includes(UserRole.ADMIN)
                   ? t('profile.adminRole')
                   : userProfile.roles.includes(UserRole.COMMUNITY_LEADER)
                   ? t('profile.leaderRole')
@@ -171,13 +171,13 @@ const ProfileOverview: React.FC = () => {
             </div>
           </div>
         </Card>
-        
+
         <Card variant="glass" className="p-6 relative overflow-hidden">
           <div className="flex items-center mb-4">
             <div className="h-px w-6 bg-gold/50 mr-2"></div>
             <h3 className="text-sm uppercase tracking-wider text-gold/80">{t('profile.achievements')}</h3>
           </div>
-          
+
           {(userProfile.badges && userProfile.badges.length > 0) ? (
             <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
               {userProfile.badges.map((badge, index) => (
@@ -192,14 +192,14 @@ const ProfileOverview: React.FC = () => {
           )}
         </Card>
       </div>
-      
+
       <div>
         <Card variant="glass" className="p-6 mb-6">
           <div className="flex items-center mb-4">
             <div className="h-px w-6 bg-gold/50 mr-2"></div>
             <h3 className="text-sm uppercase tracking-wider text-gold/80">{t('profile.stats')}</h3>
           </div>
-          
+
           <div className="space-y-5">
             {userProfile.wealthScore !== undefined && (
               <div>
@@ -208,14 +208,14 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm font-medium text-white">{userProfile.wealthScore}</span>
                 </div>
                 <div className="w-full bg-navy-700 h-1.5 rounded-sm overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-r from-green-600 to-green-500 h-full" 
+                  <div
+                    className="bg-gradient-to-r from-green-600 to-green-500 h-full"
                     style={{ width: `${Math.min(userProfile.wealthScore, 100)}%` }}
                   ></div>
                 </div>
               </div>
             )}
-            
+
             {userProfile.creditScore !== undefined && (
               <div>
                 <div className="flex justify-between mb-2">
@@ -223,14 +223,14 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm font-medium text-white">{userProfile.creditScore}</span>
                 </div>
                 <div className="w-full bg-navy-700 h-1.5 rounded-sm overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-r from-blue-600 to-blue-500 h-full" 
+                  <div
+                    className="bg-gradient-to-r from-blue-600 to-blue-500 h-full"
                     style={{ width: `${Math.min((userProfile.creditScore / 850) * 100, 100)}%` }}
                   ></div>
                 </div>
               </div>
             )}
-            
+
             {userProfile.communityContributions !== undefined && (
               <div>
                 <div className="flex justify-between mb-2">
@@ -238,14 +238,14 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm font-medium text-white">{userProfile.communityContributions}</span>
                 </div>
                 <div className="w-full bg-navy-700 h-1.5 rounded-sm overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-r from-purple-600 to-purple-500 h-full" 
+                  <div
+                    className="bg-gradient-to-r from-purple-600 to-purple-500 h-full"
                     style={{ width: `${Math.min((userProfile.communityContributions / 100) * 100, 100)}%` }}
                   ></div>
                 </div>
               </div>
             )}
-            
+
             {userProfile.eventAttendance !== undefined && (
               <div>
                 <div className="flex justify-between mb-2">
@@ -253,8 +253,8 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm font-medium text-white">{userProfile.eventAttendance}</span>
                 </div>
                 <div className="w-full bg-navy-700 h-1.5 rounded-sm overflow-hidden">
-                  <div 
-                    className="bg-gradient-to-r from-gold to-yellow-500 h-full" 
+                  <div
+                    className="bg-gradient-to-r from-gold to-yellow-500 h-full"
                     style={{ width: `${Math.min((userProfile.eventAttendance / 50) * 100, 100)}%` }}
                   ></div>
                 </div>
@@ -262,13 +262,13 @@ const ProfileOverview: React.FC = () => {
             )}
           </div>
         </Card>
-        
+
         <Card variant="glass" className="p-6">
           <div className="flex items-center mb-4">
             <div className="h-px w-6 bg-gold/50 mr-2"></div>
             <h3 className="text-sm uppercase tracking-wider text-gold/80">{t('profile.socialLinks')}</h3>
           </div>
-          
+
           {userProfile.socialLinks && Object.values(userProfile.socialLinks).some(link => !!link) ? (
             <div className="space-y-3">
               {userProfile.socialLinks.twitter && (
@@ -279,7 +279,7 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm">Twitter</span>
                 </a>
               )}
-              
+
               {userProfile.socialLinks.instagram && (
                 <a href={`https://instagram.com/${userProfile.socialLinks.instagram}`} target="_blank" rel="noopener noreferrer" className="flex items-center text-neutral-300 hover:text-pink-400 p-2 rounded-sm hover:bg-navy-700/50 transition-colors">
                   <div className="w-8 h-8 bg-pink-600/20 border border-pink-600/30 rounded-sm flex items-center justify-center mr-3">
@@ -288,7 +288,7 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm">Instagram</span>
                 </a>
               )}
-              
+
               {userProfile.socialLinks.linkedin && (
                 <a href={userProfile.socialLinks.linkedin} target="_blank" rel="noopener noreferrer" className="flex items-center text-neutral-300 hover:text-blue-500 p-2 rounded-sm hover:bg-navy-700/50 transition-colors">
                   <div className="w-8 h-8 bg-blue-600/20 border border-blue-600/30 rounded-sm flex items-center justify-center mr-3">
@@ -297,7 +297,7 @@ const ProfileOverview: React.FC = () => {
                   <span className="text-sm">LinkedIn</span>
                 </a>
               )}
-              
+
               {userProfile.socialLinks.facebook && (
                 <a href={userProfile.socialLinks.facebook} target="_blank" rel="noopener noreferrer" className="flex items-center text-neutral-300 hover:text-blue-400 p-2 rounded-sm hover:bg-navy-700/50 transition-colors">
                   <div className="w-8 h-8 bg-blue-600/20 border border-blue-600/30 rounded-sm flex items-center justify-center mr-3">
@@ -323,14 +323,14 @@ const ProfileActions: React.FC = () => {
   const { userId } = useParams<{ userId: string }>();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  
+
   // Handle sending a message
   const handleMessage = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       // Create a private chat room
       const roomId = await createChatRoom(
@@ -338,25 +338,25 @@ const ProfileActions: React.FC = () => {
         [userId],
         'private'
       );
-      
+
       // Redirect to chat room (would need routing setup)
       console.log(`Chat room created with ID: ${roomId}`);
       // TODO: Add proper navigation to chat room
-      
+
     } catch (err: any) {
       setError(err.message);
     } finally {
       setLoading(false);
     }
   };
-  
+
   // Handle connecting with user
   const handleConnect = async () => {
     if (!userId) return;
-    
+
     setLoading(true);
     setError(null);
-    
+
     try {
       await connectWithUser(userId);
     } catch (err: any) {
@@ -365,11 +365,11 @@ const ProfileActions: React.FC = () => {
       setLoading(false);
     }
   };
-  
+
   return (
     <div className="flex space-x-3">
       {error && <div className="text-red-500 text-xs mb-2">{error}</div>}
-      
+
       <button
         className="flex items-center px-3 py-2 bg-navy-800 hover:bg-navy-700 border border-navy-700 hover:border-gold/30 text-neutral-200 text-sm rounded-sm transition-colors"
         onClick={handleMessage}
@@ -378,7 +378,7 @@ const ProfileActions: React.FC = () => {
         <MessageCircle size={16} className="mr-2 text-gold/70" />
         {t('profile.message')}
       </button>
-      
+
       <button
         className="flex items-center px-3 py-2 bg-gold/10 border border-gold/30 hover:bg-gold/20 hover:border-gold/50 text-gold text-sm rounded-sm transition-colors"
         onClick={handleConnect}
@@ -404,12 +404,12 @@ const ProfileConnections: React.FC = () => {
     since: Date;
   }>>([]);
   const [loading, setLoading] = useState(true);
-  
+
   useEffect(() => {
     const loadConnections = async () => {
       if (userProfile?.connections && userProfile.connections.length > 0) {
         const connectionsData = [];
-        
+
         for (const connection of userProfile.connections) {
           if (connection.status === 'connected') {
             try {
@@ -430,16 +430,16 @@ const ProfileConnections: React.FC = () => {
             }
           }
         }
-        
+
         setConnections(connectionsData);
       }
-      
+
       setLoading(false);
     };
-    
+
     loadConnections();
   }, [userProfile, fetchUserProfile]);
-  
+
   if (loading) {
     return (
       <div className="flex justify-center py-12">
@@ -452,19 +452,19 @@ const ProfileConnections: React.FC = () => {
       </div>
     );
   }
-  
+
   if (connections.length === 0) {
     return (
       <Card variant="glass" className="text-center py-12 px-6 relative overflow-hidden">
         <div className="absolute top-0 right-0 opacity-5 pointer-events-none">
           <EyeLogo size={128} variant="gold" expressiveness="low" />
         </div>
-        
+
         <User size={48} className="mx-auto mb-4 text-neutral-500" />
         <h4 className="text-lg font-medium mb-3 text-white">{t('profile.noConnections')}</h4>
         <p className="text-neutral-400 max-w-md mx-auto">{t('profile.connectionsEmpty')}</p>
-        
-        <button 
+
+        <button
           className="mt-6 px-4 py-2 bg-gold/10 border border-gold/30 hover:bg-gold/20 hover:border-gold/50 transition-colors rounded-sm text-sm inline-flex items-center text-gold"
         >
           <UserPlus size={16} className="mr-2" />
@@ -473,12 +473,12 @@ const ProfileConnections: React.FC = () => {
       </Card>
     );
   }
-  
+
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
       {connections.map((connection) => (
         <Card variant="glass" key={connection.user.userId} className="p-5 flex items-center hover:border-gold/30 transition-all duration-300">
-          <UserAvatar 
+          <UserAvatar
             userId={connection.user.userId}
             displayName={connection.user.displayName}
             photoURL={connection.user.photoURL}
@@ -486,14 +486,14 @@ const ProfileConnections: React.FC = () => {
             className="mr-4"
             interactive={true}
           />
-          
+
           <div className="flex-1">
             <h4 className="font-medium text-white">{connection.user.displayName}</h4>
             <p className="text-xs text-neutral-400 mt-1">
               {t('profile.connectedSince')} {new Date(connection.since).toLocaleDateString()}
             </p>
           </div>
-          
+
           <button className="text-neutral-400 hover:text-gold transition-colors p-2 rounded-sm hover:bg-navy-700/50">
             <MessageCircle size={16} />
           </button>
@@ -503,18 +503,18 @@ const ProfileConnections: React.FC = () => {
   );
 };
 
-// Simple main ProfilePage component 
+// Simple main ProfilePage component
 const ProfilePage: React.FC = () => {
   const { userProfile } = useUser();
   const { userId } = useParams<{ userId: string }>();
   const { t } = useTranslation();
-  
+
   const [activeTab, setActiveTab] = useState('overview');
   const [isEditing, setIsEditing] = useState(false);
-  
+
   // Is this the current user's profile?
-  const isCurrentUser = !userId || (userProfile && userId === userProfile.userId);
-  
+  const isCurrentUser = Boolean(!userId || (userProfile && userId === userProfile.userId));
+
   // Simple loading state
   if (!userProfile) {
     return (
@@ -528,11 +528,11 @@ const ProfilePage: React.FC = () => {
       </div>
     );
   }
-  
+
   return (
     <div className="container py-4 sm:py-6 md:py-8 max-w-4xl mx-auto animate-fade-in">
       {/* Profile Header */}
-      <ProfileHeader 
+      <ProfileHeader
         name={userProfile.displayName}
         photoURL={userProfile.photoURL}
         coverPhotoURL={userProfile.coverPhotoURL}
@@ -540,41 +540,41 @@ const ProfilePage: React.FC = () => {
         isCurrentUser={isCurrentUser}
         onEdit={() => setIsEditing(true)}
       />
-      
+
       {/* Profile Tabs and Actions */}
       <div className="flex flex-col sm:flex-row sm:justify-between sm:items-end gap-4 mb-6">
-        <ProfileTabs 
-          activeTab={activeTab} 
-          setActiveTab={setActiveTab} 
-          isCurrentUser={isCurrentUser} 
+        <ProfileTabs
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          isCurrentUser={isCurrentUser}
         />
-        
+
         {/* Show actions only if viewing another user's profile */}
         {!isCurrentUser && <ProfileActions />}
       </div>
-      
+
       {/* Profile Content */}
       <div>
         {/* Overview */}
         {activeTab === 'overview' && <ProfileOverview />}
-        
+
         {/* Activity */}
         {activeTab === 'activity' && <ActivityLog />}
-        
+
         {/* Connections */}
         {activeTab === 'connections' && isCurrentUser && <ProfileConnections />}
-        
+
         {/* Settings */}
         {activeTab === 'settings' && isCurrentUser && (
           <Card variant="glass" className="text-center py-12 px-6 relative overflow-hidden">
             <div className="absolute top-0 right-0 opacity-5 pointer-events-none">
               <EyeLogo size={128} variant="gold" expressiveness="low" />
             </div>
-            
+
             <Activity size={48} className="mx-auto mb-5 text-gold/80" />
             <h4 className="text-xl font-medium mb-3 text-white">{t('profile.settingsTitle')}</h4>
             <p className="text-neutral-400 mb-8 max-w-md mx-auto">{t('profile.settingsDesc')}</p>
-            <button 
+            <button
               className="px-4 py-2 bg-gold/10 border border-gold/30 hover:bg-gold/20 hover:border-gold/50 text-gold text-sm rounded-sm transition-colors"
               onClick={() => setIsEditing(true)}
             >

@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useWealth } from '../../contexts/WealthContext';
 import Card from '../common/Card';
 import MetricDisplay from '../common/MetricDisplay';
@@ -25,6 +26,7 @@ enum GenerationalTab {
 }
 
 const GenerationalWealthManager: React.FC = () => {
+  const navigate = useNavigate();
   const { 
     wealthProfile,
     isLoading,
@@ -208,11 +210,11 @@ const GenerationalWealthManager: React.FC = () => {
         </button>
         
         <button 
-          onClick={() => setActiveTab(GenerationalTab.Estate)}
+          onClick={() => navigate('/wealth/planning')}
           className="bg-gray-900 p-4 rounded-sm flex flex-col items-center justify-center hover:bg-gray-800 transition-colors"
         >
           <FileText size={24} className="mb-2 text-green-500" />
-          <span className="text-xs">Estate Planning</span>
+          <span className="text-xs">Wealth Planning</span>
         </button>
         
         <button 

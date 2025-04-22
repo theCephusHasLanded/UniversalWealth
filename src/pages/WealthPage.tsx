@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { CreditCard, TrendingUp, Users, Zap, PieChart, Calendar, ArrowRight, BookOpen } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import Card from '../components/common/Card';
 import MetricDisplay from '../components/common/MetricDisplay';
 import GenerationalWealthManager from '../components/wealth/GenerationalWealthManager';
@@ -8,6 +9,7 @@ import { useTranslation } from '../contexts/TranslationContext';
 
 const WealthPage: React.FC = () => {
   const { t, language } = useTranslation();
+  const navigate = useNavigate();
   const [activeSection, setActiveSection] = useState<'overview' | 'pay-in-4' | 'investments' | 'ai-assistant' | 'generational'>('overview');
 
   const formatCurrency = (value: number): string => {
@@ -90,11 +92,11 @@ const WealthPage: React.FC = () => {
         </button>
         
         <button 
-          onClick={() => setActiveSection('generational')}
+          onClick={() => navigate('/wealth/planning')}
           className="bg-gray-900 p-3 rounded-sm flex flex-col items-center justify-center hover:bg-gray-800 transition-colors"
         >
           <BookOpen size={24} className="mb-2 text-green-500" />
-          <span className="text-xs text-center">Generational</span>
+          <span className="text-xs text-center">Wealth Planning</span>
         </button>
       </div>
     </div>
@@ -251,7 +253,15 @@ const WealthPage: React.FC = () => {
           <div className="w-2 h-12 mr-3" style={{ backgroundColor: '#45B26B' }}></div>
           <div>
             <h2 className="text-sm font-normal tracking-widest text-gray-400 uppercase">{t('wealth.name')}</h2>
-            <p className="text-white text-sm mt-1">{t('wealth.description')}</p>
+            <div className="flex items-center">
+              <p className="text-white text-sm mt-1 mr-2">{t('wealth.description')}</p>
+              <button 
+                onClick={() => navigate('/wealth/planning')}
+                className="text-xs bg-navy-800 px-2 py-1 rounded-sm text-gold border border-navy-700 hover:border-gold transition-colors mt-1"
+              >
+                {t('wealth.planning.title')}
+              </button>
+            </div>
           </div>
         </div>
       </div>

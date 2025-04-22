@@ -6,6 +6,10 @@ interface TranslationContextType {
   language: Language;
   setLanguage: (language: Language) => void;
   t: (key: string) => string;
+  isReady: boolean;
+  translations: Record<Language, Record<string, string>>;
+  tWithVars: (key: string, values: Record<string, string | number>) => string;
+  tPlural: (key: string, count: number) => string;
 }
 
 const TranslationContext = createContext<TranslationContextType | undefined>(undefined);
@@ -94,6 +98,34 @@ const translations: Record<Language, Record<string, string>> = {
     // Platforms
     'wealth.name': 'WEALTH BY LKHN',
     'wealth.description': 'Exclusive financial ecosystem with proprietary AI and advanced credit-building strategies',
+    'wealth.overview': 'Overview',
+    'wealth.investments': 'Investments',
+    'wealth.payIn4': 'Pay-in-4',
+    'wealth.community': 'Community',
+    'wealth.planning.title': 'Wealth Planning',
+    'wealth.planning.description': 'Plan for generational wealth with our family tree visualization and tools',
+    'wealth.planning.familyTree': 'Family Tree',
+    'wealth.planning.projections': 'Financial Projections',
+    'wealth.planning.estate': 'Estate Planning',
+    'wealth.planning.education': 'Education Funds',
+    'wealth.planning.taxes': 'Tax Optimization',
+    'wealth.generational.title': 'Generational Wealth',
+    'wealth.generational.description': 'Build and preserve wealth for future generations',
+    'wealth.generational.startPlanning': 'Start Planning',
+    'wealth.tree.title': 'Family Wealth Tree',
+    'wealth.tree.description': 'Visualize your family\'s wealth structure and inheritance plans',
+    'wealth.tree.recommendations': 'Wealth Planning Recommendations',
+    'wealth.tree.defaultView': 'Default View',
+    'wealth.tree.financialView': 'Financial View',
+    'wealth.tree.legalView': 'Legal View',
+    'wealth.tree.addPerson': 'Add Family Member',
+    'wealth.tree.addAsset': 'Add Asset',
+    'wealth.tree.addTrust': 'Add Trust',
+    'wealth.tree.person': 'Person',
+    'wealth.tree.asset': 'Asset',
+    'wealth.tree.trust': 'Trust',
+    'wealth.tree.delete': 'Delete',
+    'wealth.tree.deleteSelected': 'Delete Selected',
     'hub.name': 'LKHN HUB',
     'hub.description': 'Curated members-only spaces for networking, creation, and financial mastery',
     'trendcrypto.name': 'LKHN TRENDCRYPTO',
@@ -131,6 +163,7 @@ const translations: Record<Language, Record<string, string>> = {
     'auth.resetPassword': 'Reset Password',
     'auth.sendResetLink': 'Send Reset Link',
     'auth.googleLogin': 'Continue with Google',
+    'auth.googleLoginRedirect': 'Continue with Google (Redirect)',
     'auth.needAccount': 'Need an account? Sign up',
     'auth.haveAccount': 'Already have an account? Sign in',
     'auth.backToLogin': 'Back to sign in',
@@ -227,6 +260,13 @@ const translations: Record<Language, Record<string, string>> = {
     'language.ru': 'Русский',
     'language.xh': 'isiXhosa',
     'language.ar': 'العربية',
+    
+    // New pluralization examples
+    'notification.count.singular': 'You have 1 notification',
+    'notification.count.plural': 'You have {{count}} notifications',
+    
+    // New variable interpolation examples
+    'profile.welcome': 'Welcome back, {{name}}',
   },
   es: {
     // Language names
@@ -968,6 +1008,7 @@ const translations: Record<Language, Record<string, string>> = {
 
 export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>('en');
+  const [isReady, setIsReady] = useState(false);
   
   // Get translation for a key
   const t = (key: string): string => {
@@ -979,6 +1020,24 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
     localStorage.setItem('lkhn-language', lang);
+    
+    // Set RTL attribute for Arabic language
+    if (lang === 'ar') {
+      document.documentElement.setAttribute('dir', 'rtl');
+      document.documentElement.lang = 'ar';
+      document.documentElement.classList.add('rtl');
+      document.documentElement.classList.remove('ltr');
+    } else {
+      document.documentElement.setAttribute('dir', 'ltr');
+      document.documentElement.lang = lang;
+      document.documentElement.classList.add('ltr');
+      document.documentElement.classList.remove('rtl');
+    }
+    
+    // Dispatch custom event for any components not using the context
+    window.dispatchEvent(new CustomEvent('languageChanged', { 
+      detail: { language: lang } 
+    }));
   };
 
   // Load language preference from localStorage on component mount
@@ -990,14 +1049,52 @@ export const TranslationProvider: React.FC<{ children: React.ReactNode }> = ({ c
       // Set RTL attribute for Arabic language
       if (storedLanguage === 'ar') {
         document.documentElement.setAttribute('dir', 'rtl');
+        document.documentElement.lang = 'ar';
+        document.documentElement.classList.add('rtl');
+        document.documentElement.classList.remove('ltr');
       } else {
         document.documentElement.setAttribute('dir', 'ltr');
+        document.documentElement.lang = storedLanguage;
+        document.documentElement.classList.add('ltr');
+        document.documentElement.classList.remove('rtl');
       }
     }
+    
+    // Make translations globally available for non-React contexts
+    window.__LKHN_TRANSLATIONS = translations;
+    
+    setIsReady(true);
   }, []);
   
+  // Create context value
+  const contextValue = {
+    language,
+    setLanguage,
+    t,
+    isReady,
+    translations,
+    // Helper methods for interpolation and pluralization
+    tWithVars: (key: string, values: Record<string, string | number>): string => {
+      let translated = t(key);
+      Object.entries(values).forEach(([varName, value]) => {
+        const regex = new RegExp(`{{${varName}}}`, 'g');
+        translated = translated.replace(regex, String(value));
+      });
+      return translated;
+    },
+    tPlural: (key: string, count: number): string => {
+      const pluralKey = count === 1 ? `${key}.singular` : `${key}.plural`;
+      const translation = t(pluralKey);
+      if (translation === pluralKey) {
+        // Fallback to the base key if plural forms don't exist
+        return t(key);
+      }
+      return translation.replace('{{count}}', String(count));
+    }
+  };
+  
   return (
-    <TranslationContext.Provider value={{ language, setLanguage, t }}>
+    <TranslationContext.Provider value={contextValue}>
       {children}
     </TranslationContext.Provider>
   );

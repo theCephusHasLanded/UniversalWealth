@@ -132,36 +132,34 @@ function App() {
   
   return (
     <>
-      <AuthProvider>
-        <UserProvider>
-          {/* Three.js loading animation overlays everything else when active */}
-          {isLoading && (
-            <ThreeJsLoader 
-              onComplete={handleLoadingComplete} 
-              progress={loadingProgress} 
-            />
-          )}
-          
-          {/* Welcome screen shown after successful login */}
-          {showWelcome && (
-            <WelcomeScreen onComplete={handleWelcomeComplete} />
-          )}
-          
-          {/* Main application routes */}
-          <AppRoutes />
-          
-          {/* Feedback button */}
-          <FeedbackButton onSubmit={handleFeedbackSubmit} />
-          
-          {/* Cookie consent banner */}
-          {showCookieConsent && (
-            <CookieConsent 
-              onAccept={handleCookieConsent} 
-              onDecline={handleCookieConsent} 
-            />
-          )}
-        </UserProvider>
-      </AuthProvider>
+      <UserProvider>
+        {/* Three.js loading animation overlays everything else when active */}
+        {isLoading && (
+          <ThreeJsLoader 
+            onComplete={handleLoadingComplete} 
+            progress={loadingProgress} 
+          />
+        )}
+        
+        {/* Welcome screen shown after successful login */}
+        {showWelcome && (
+          <WelcomeScreen onComplete={handleWelcomeComplete} />
+        )}
+        
+        {/* Main application routes */}
+        <AppRoutes />
+        
+        {/* Feedback button */}
+        <FeedbackButton onSubmit={handleFeedbackSubmit} />
+        
+        {/* Cookie consent banner */}
+        {showCookieConsent && (
+          <CookieConsent 
+            onAccept={handleCookieConsent} 
+            onDecline={handleCookieConsent} 
+          />
+        )}
+      </UserProvider>
     </>
   );
 }

@@ -8,7 +8,9 @@ import {
   User, 
   MessageSquare
 } from 'lucide-react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import EyeLogo from '../common/EyeLogo';
+import WealthSubMenu from '../common/WealthSubMenu';
 import { useTranslation } from '../../contexts/TranslationContext';
 
 interface NavigationProps {
@@ -24,8 +26,11 @@ interface MenuItem {
 
 const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
   const { t } = useTranslation();
+  const location = useLocation();
+  const navigate = useNavigate();
   const containerRef = useRef<HTMLDivElement>(null);
   const isTouch = typeof window !== 'undefined' && 'ontouchstart' in window;
+  const [showWealthMenu, setShowWealthMenu] = useState(false);
   
   // Store all menu items
   const allMenuItems: MenuItem[] = [
@@ -43,6 +48,30 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
   const [visibleCount, setVisibleCount] = useState(5);
   // Track the starting index for the visible menu items
   const [startIndex, setStartIndex] = useState(0);
+  
+  // Helper function to get path from tab ID
+  const getPathFromTabId = (tabId: string): string => {
+    switch (tabId) {
+      case 'invite':
+        return '/membership';
+      case 'overview':
+        return '/dashboard';
+      case 'wealth':
+        return '/wealth';
+      case 'hub':
+        return '/hub';
+      case 'trendcrypto':
+        return '/trendcrypto';
+      case 'lificosm':
+        return '/lificosm';
+      case 'forum':
+        return '/forum';
+      case 'profile':
+        return '/profile';
+      default:
+        return '/';
+    }
+  };
   
   // Handle screen size changes
   useEffect(() => {
@@ -163,6 +192,17 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
                   setActiveTab(item.id);
                   animateRotation(index);
                   
+                  // If this is the wealth tab, show the wealth submenu
+                  if (item.id === 'wealth') {
+                    setShowWealthMenu(true);
+                    navigate('/wealth');
+                    return;
+                  }
+                  
+                  // Navigate based on tab ID
+                  const path = getPathFromTabId(item.id);
+                  navigate(path);
+                  
                   // Dispatch custom event to set active tab
                   window.dispatchEvent(new CustomEvent('setActiveTab', { detail: item.id }));
                 }}
@@ -196,6 +236,12 @@ const Navigation: React.FC<NavigationProps> = ({ activeTab, setActiveTab }) => {
           />
         ))}
       </div>
+      
+      {/* Wealth SubMenu */}
+      <WealthSubMenu 
+        isOpen={showWealthMenu} 
+        onClose={() => setShowWealthMenu(false)} 
+      />
     </footer>
   );
 };

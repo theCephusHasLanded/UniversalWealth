@@ -1,9 +1,9 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth } from 'firebase/auth';
-import { getFirestore } from 'firebase/firestore';
-import { getStorage } from 'firebase/storage';
+import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import { getPerformance } from 'firebase/performance';
-import { getAnalytics, isSupported } from 'firebase/analytics';
+import { getAnalytics, isSupported, setConsent } from 'firebase/analytics';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 
 // Your web app's Firebase configuration
@@ -29,6 +29,9 @@ const storage = getStorage(app);
 // Realtime Database disabled - using Firestore for all data storage including presence
 const performance = getPerformance(app);
 
+// We're using the actual Firebase services, not emulators
+console.log('Using real Firebase services instead of emulators');
+
 // App Check for security (when in production)
 if (process.env.NODE_ENV === 'production' && import.meta.env.VITE_RECAPTCHA_SITE_KEY) {
   initializeAppCheck(app, {
@@ -37,11 +40,19 @@ if (process.env.NODE_ENV === 'production' && import.meta.env.VITE_RECAPTCHA_SITE
   });
 }
 
-// Initialize analytics conditionally
+// Initialize analytics conditionally and set consent settings
 let analytics = null;
 isSupported().then(supported => {
   if (supported) {
     analytics = getAnalytics(app);
+    // Set analytics consent settings for third-party cookies
+    setConsent({
+      analytics_storage: 'denied',
+      ad_storage: 'denied',
+      functionality_storage: 'granted',
+      personalization_storage: 'denied',
+      security_storage: 'granted'
+    });
   }
 });
 

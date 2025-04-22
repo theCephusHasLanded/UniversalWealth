@@ -9,6 +9,7 @@ import Testimonial from '../components/common/Testimonial';
 import MembersOnlyTeaser from '../components/common/MembersOnlyTeaser';
 import EyeLogo from '../components/common/EyeLogo';
 import Logo from '../components/common/Logo';
+import SignInButton from '../components/common/SignInButton';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -77,12 +78,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                 <button className="text-xs uppercase tracking-widest text-neutral-300 hover:text-gold transition-colors">
                   Membership
                 </button>
-                <button 
-                  className="text-xs uppercase tracking-widest text-gold border-b border-gold/30 hover:border-gold transition-colors"
-                  onClick={onSignIn || onGetStarted}
-                >
-                  Member Access
-                </button>
+                <SignInButton 
+                  variant="outline" 
+                  size="sm"
+                />
               </div>
             </div>
           </div>
@@ -135,14 +134,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                 {t('app.join')}
               </ExclusiveButton>
               
-              <ExclusiveButton 
-                variant="outline"
+              <SignInButton 
+                variant="outline" 
                 size="lg"
-                icon={<LogIn size={16} />}
-                onClick={onSignIn || onGetStarted}
-              >
-                {t('app.access')}
-              </ExclusiveButton>
+                className="min-w-32"
+              />
             </div>
             
             {/* Invitation code input with elegant styling */}
@@ -355,14 +351,11 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                 {t('app.join')}
               </ExclusiveButton>
               
-              <ExclusiveButton 
-                variant="outline"
+              <SignInButton 
+                variant="outline" 
                 size="lg"
-                icon={<LogIn size={16} />}
-                onClick={onSignIn || onGetStarted}
-              >
-                {t('app.access')}
-              </ExclusiveButton>
+                className="min-w-32"
+              />
             </div>
           </div>
         </div>

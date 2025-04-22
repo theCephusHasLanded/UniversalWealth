@@ -21,7 +21,7 @@ interface TabItem {
 const SideFooter: React.FC = () => {
   const { t } = useTranslation();
   const [isOpen, setIsOpen] = useState(false);
-  const [activeTab, setActiveTab] = useState<string>('about');
+  const [activeTab, setActiveTab] = useState<string>('language');
   
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
@@ -40,10 +40,10 @@ const SideFooter: React.FC = () => {
   ];
 
   const tabs: TabItem[] = [
+    { id: 'language', icon: <Globe size={16} className="text-gold/80" />, title: t('language') || 'Language' },
     { id: 'about', icon: <Info size={16} />, title: 'About' },
     { id: 'legal', icon: <Shield size={16} />, title: 'Legal' },
     { id: 'contact', icon: <Mail size={16} />, title: 'Contact' },
-    { id: 'language', icon: <Globe size={16} />, title: 'Language' },
   ];
   
   const renderTabContent = () => {
@@ -118,6 +118,7 @@ const SideFooter: React.FC = () => {
           { code: 'en', name: 'language.en' },
           { code: 'es', name: 'language.es' },
           { code: 'fr', name: 'language.fr' },
+          { code: 'ht', name: 'language.ht' },
           { code: 'zh', name: 'language.zh' },
           { code: 'ja', name: 'language.ja' },
           { code: 'ru', name: 'language.ru' },
@@ -127,7 +128,7 @@ const SideFooter: React.FC = () => {
         
         const handleLanguageChange = (code: string) => {
           // Set the language
-          setLanguage(code as 'en' | 'es' | 'fr' | 'zh' | 'ja' | 'ru' | 'xh' | 'ar');
+          setLanguage(code as 'en' | 'es' | 'fr' | 'zh' | 'ja' | 'ru' | 'xh' | 'ar' | 'ht');
           
           // Set RTL attribute for Arabic language
           if (code === 'ar') {
@@ -140,7 +141,7 @@ const SideFooter: React.FC = () => {
         return (
           <div className="p-4">
             <h4 className="text-xs uppercase tracking-wider text-gold mb-3">{t('language')}</h4>
-            <div className="grid grid-cols-2 gap-2">
+            <div className="grid grid-cols-2 gap-2 max-h-60 overflow-y-auto pr-1">
               {languages.map((lang) => (
                 <button
                   key={lang.code}
@@ -153,6 +154,9 @@ const SideFooter: React.FC = () => {
                   {t(lang.name)}
                 </button>
               ))}
+            </div>
+            <div className="text-2xs text-neutral-500 mt-3 flex items-center justify-center">
+              <Globe size={10} className="mr-1 opacity-50" /> {language.toUpperCase()}
             </div>
           </div>
         );
@@ -170,13 +174,16 @@ const SideFooter: React.FC = () => {
         className={`fixed left-0 bottom-1/2 transform translate-y-1/2 z-50 p-2 
                     ${isOpen ? 'bg-navy-700' : 'bg-navy-800/90 hover:bg-navy-700/90'} 
                     border border-navy-600 transition-all duration-300
-                    shadow-lg`}
-        aria-label={isOpen ? 'Close footer' : 'Open footer'}
+                    shadow-lg flex flex-col items-center`}
+        aria-label={isOpen ? 'Close footer' : 'Open settings & language'}
       >
         {isOpen ? (
           <X size={16} className="text-gold" />
         ) : (
-          <Menu size={16} className="text-neutral-400" />
+          <>
+            <Globe size={16} className="text-gold mb-1" />
+            <span className="text-2xs text-neutral-400 uppercase tracking-wider">{useTranslation().language.toUpperCase()}</span>
+          </>
         )}
       </button>
       
