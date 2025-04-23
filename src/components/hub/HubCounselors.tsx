@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Bot } from 'lucide-react';
 import AICounselor from './AICounselor';
 import AIConversation from './AIConversation';
 import AIEye from './AIEye';
+import aiCounselorService from '../../services/hub/aiCounselorService';
 
 // Map between counselor types
 type CounselorType = 'dance' | 'social' | 'introspective';
@@ -21,6 +22,23 @@ const HubCounselors: React.FC = () => {
     type: CounselorType;
     message: string;
   } | null>(null);
+  
+  const [isLLMConnected, setIsLLMConnected] = useState(false);
+  
+  // Check if the LLM is connected on mount
+  useEffect(() => {
+    const checkLLMConnection = async () => {
+      try {
+        const isConnected = await aiCounselorService.checkLLMConnection();
+        setIsLLMConnected(isConnected);
+      } catch (error) {
+        console.error('Error checking LLM connection:', error);
+        setIsLLMConnected(false);
+      }
+    };
+    
+    checkLLMConnection();
+  }, []);
 
   const handleInteraction = (type: CounselorType, message: string) => {
     setActiveConversation({ type, message });
@@ -36,6 +54,19 @@ const HubCounselors: React.FC = () => {
         <p className="text-xs text-gray-400 mb-3">
           Digital companions that bridge physical and virtual interactions, enhancing your hub experience
         </p>
+        
+        {/* LLM Status Indicator */}
+        <div className="mb-4 p-2 bg-gray-800 rounded-sm flex items-center justify-between">
+          <div className="flex items-center">
+            <div className={`h-2 w-2 rounded-full mr-2 ${isLLMConnected ? 'bg-green-500' : 'bg-yellow-500'}`}></div>
+            <span className="text-xs text-gray-400">
+              AI System Status: {isLLMConnected ? 'Connected to Gemma LLM' : 'Using simulated responses'}
+            </span>
+          </div>
+          <span className="text-xs text-purple-400">
+            {isLLMConnected ? 'Full intelligence active' : 'Basic response mode'}
+          </span>
+        </div>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">

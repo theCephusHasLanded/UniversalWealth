@@ -1,17 +1,15 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { X, Send, User } from 'lucide-react';
 import AIEye from './AIEye';
+import aiCounselorService, { AIMessage, AIPersonalityType } from '../../services/hub/aiCounselorService';
+
+// Map between counselor types
+type CounselorType = 'rhythm' | 'nexus' | 'serenity';
 
 interface AIConversationProps {
-  type: 'rhythm' | 'nexus' | 'serenity';
+  type: CounselorType;
   initialMessage: string;
   onClose: () => void;
-}
-
-interface Message {
-  sender: 'ai' | 'user';
-  text: string;
-  timestamp: number;
 }
 
 const AIConversation: React.FC<AIConversationProps> = ({ 
@@ -19,7 +17,8 @@ const AIConversation: React.FC<AIConversationProps> = ({
   initialMessage, 
   onClose
 }) => {
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<AIMessage[]>([]);
+  const [conversationId, setConversationId] = useState<string>('');
   const [userInput, setUserInput] = useState('');
   const [isAISpeaking, setIsAISpeaking] = useState(false);
   const [currentAIMessage, setCurrentAIMessage] = useState('');
@@ -32,13 +31,6 @@ const AIConversation: React.FC<AIConversationProps> = ({
       color: '#7C3AED', // Purple
       bgColor: 'bg-purple-900/10',
       borderColor: 'border-purple-700',
-      responses: [
-        "Let's get moving! I have a great 5-minute dance sequence we could try right now.",
-        "Energy is flowing! How about a quick movement challenge to break up your day?",
-        "I sense some creative potential! Would you like to try a rhythmic expression exercise?",
-        "Movement is medicine! Let's schedule a community dance session at the Hub this week.",
-        "Your energy feels a bit low today. A quick movement break could help rejuvenate you!",
-      ],
       typingSpeed: 30, // Fast typing
     },
     nexus: {
@@ -46,13 +38,6 @@ const AIConversation: React.FC<AIConversationProps> = ({
       color: '#3B82F6', // Blue
       bgColor: 'bg-blue-900/10',
       borderColor: 'border-blue-700',
-      responses: [
-        "I noticed your interest in sustainable investing - there are 3 other members online now with similar goals.",
-        "Would you like me to arrange a gathering at the Austin hub this weekend? I can invite members with complementary skills.",
-        "I see potential for a meaningful connection with our Houston community. Would you like an introduction?",
-        "Your profile suggests you'd enjoy our upcoming cultural exchange event. Shall I add you to the guest list?",
-        "Community building happens through shared experiences. How about joining our virtual coffee chat tomorrow?",
-      ],
       typingSpeed: 40, // Medium typing
     },
     serenity: {
@@ -60,18 +45,23 @@ const AIConversation: React.FC<AIConversationProps> = ({
       color: '#10B981', // Green
       bgColor: 'bg-green-900/10',
       borderColor: 'border-green-700',
-      responses: [
-        "Take a moment to breathe deeply. How are you truly feeling about your financial journey today?",
-        "I sense some uncertainty in your words. Would a guided reflection help bring clarity to your decision?",
-        "Sometimes the path forward becomes clear when we align our actions with our values. Shall we explore that together?",
-        "The quiet space at our Hub location might provide the perfect environment for this inner work. Would you like to book time there?",
-        "Consider this question: what would success in this area look like for you, beyond just the numbers?",
-      ],
       typingSpeed: 60, // Slow, deliberate typing
     }
   };
   
   const selectedAI = aiConfig[type];
+  
+  // Initialize conversation
+  useEffect(() => {
+    // Initialize conversation with the LLM service
+    const convoId = aiCounselorService.initializeConversation(type as AIPersonalityType);
+    setConversationId(convoId);
+    
+    // Add simulated greeting based on the initial message
+    setTimeout(() => {
+      simulateAITyping(initialMessage);
+    }, 500);
+  }, [type, initialMessage]);
   
   // Scroll to bottom of messages
   const scrollToBottom = () => {
@@ -96,8 +86,9 @@ const AIConversation: React.FC<AIConversationProps> = ({
         setMessages(prev => [
           ...prev, 
           { 
-            sender: 'ai', 
-            text, 
+            id: Date.now().toString(),
+            role: 'assistant', 
+            content: text, 
             timestamp: Date.now() 
           }
         ]);
@@ -108,40 +99,40 @@ const AIConversation: React.FC<AIConversationProps> = ({
     return () => clearInterval(typingInterval);
   };
   
-  // Generate AI response based on user input
-  const getAIResponse = () => {
-    // Choose a random response from the AI's response pool
-    const responseIndex = Math.floor(Math.random() * selectedAI.responses.length);
-    return selectedAI.responses[responseIndex];
-  };
-  
   // Handle user message submission
-  const handleSendMessage = () => {
-    if (!userInput.trim()) return;
+  const handleSendMessage = async () => {
+    if (!userInput.trim() || isAISpeaking) return;
     
     // Add user message
-    const newUserMessage = {
-      sender: 'user' as const,
-      text: userInput,
+    const newUserMessage: AIMessage = {
+      id: Date.now().toString(),
+      role: 'user',
+      content: userInput,
       timestamp: Date.now()
     };
     
     setMessages(prev => [...prev, newUserMessage]);
     setUserInput('');
     
-    // Simulate AI thinking then respond
-    setTimeout(() => {
-      const aiResponse = getAIResponse();
-      simulateAITyping(aiResponse);
-    }, 1000);
+    // Get AI response from the LLM service
+    try {
+      setIsAISpeaking(true);
+      
+      // Send message to LLM service
+      const response = await aiCounselorService.sendMessage(
+        conversationId, 
+        newUserMessage.content
+      );
+      
+      // Simulate typing effect
+      simulateAITyping(response.content);
+    } catch (error) {
+      console.error('Error getting AI response:', error);
+      
+      // Fallback to basic response on error
+      simulateAITyping("I'm having trouble connecting right now. Let's try again in a moment.");
+    }
   };
-  
-  // Initialize with AI greeting
-  useEffect(() => {
-    setTimeout(() => {
-      simulateAITyping(initialMessage);
-    }, 500);
-  }, [initialMessage]);
   
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -227,14 +218,14 @@ const AIConversation: React.FC<AIConversationProps> = ({
             {messages.map((message, index) => (
               <div 
                 key={index} 
-                className={`flex ${message.sender === 'user' ? 'justify-end' : 'justify-start'}`}
+                className={`flex ${message.role === 'user' ? 'justify-end' : 'justify-start'}`}
               >
                 <div className={`max-w-[80%] ${
-                  message.sender === 'user' 
+                  message.role === 'user' 
                     ? 'bg-gray-800 text-white rounded-tl-lg rounded-tr-lg rounded-bl-lg' 
                     : `${selectedAI.bgColor} text-white rounded-tl-lg rounded-tr-lg rounded-br-lg`
                 } p-3`}>
-                  {message.text}
+                  {message.content}
                 </div>
               </div>
             ))}
