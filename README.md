@@ -9,6 +9,7 @@ A comprehensive ecosystem integrating digital finance, physical spaces, AI-drive
 - **Multi-language Support**: Includes English, Spanish, French, Chinese, Japanese, Russian, Xhosa, and Arabic with full RTL support.
 - **Responsive Design**: Mobile-first interface built with Tailwind CSS.
 - **Component Ecosystem**: Various pillars of the LKHN platform within a unified interface.
+- **Enterprise-Grade Security**: End-to-end encryption, multi-factor authentication, and role-based access control.
 
 ![20250409_2350_Skyline Office View_remix_01jrex41cgfrt8xs77pm57d36c](https://github.com/user-attachments/assets/aeb8d879-f4ee-409d-b0a5-4d1f1eb03e11)
 
@@ -41,6 +42,20 @@ A comprehensive ecosystem integrating digital finance, physical spaces, AI-drive
 - Vite
 - Tailwind CSS
 - Lucide React (icons)
+- Firebase Auth, Firestore
+- Web Crypto API for end-to-end encryption
+
+## Security Architecture
+
+LKHN Universal Wealth implements enterprise-grade security:
+
+- **End-to-End Encryption (E2EE)**: Client-side AES-256-GCM encryption for sensitive financial data
+- **Multi-Factor Authentication (MFA)**: TOTP and WebAuthn support beyond basic password authentication
+- **Role-Based Access Control (RBAC)**: Least-privilege principle implementation
+- **API Security**: OAuth 2.0 with PKCE and short-lived JWTs for API authentication
+- **Data Privacy**: Minimized data collection with GDPR/CCPA compliance by design
+
+See our [security architecture documentation](/setup/security-architecture.md) for details.
 
 ## Getting Started
 
@@ -88,13 +103,15 @@ npm run build
 - `src/pages/`: Main page components
 - `src/types/`: TypeScript interfaces and types
 - `src/utils/`: Helper functions and utilities
+- `src/auth/`: Authentication and security-related components
+- `src/services/security/`: Security services and utilities
 
 ## Universal Wealth Vision
 
 A new paradigm for wealth that is distributed rather than concentrated, communal rather than individualistic, and inclusive by design rather than as an afterthought.
 
 ## Screenshots
-<img width="458" alt="Screenshot 2025-04-09 at 11 55 24 PM" src="https://github.com/user-attachments/assets/e115cb3a-3ad6-4086-ac21-b7f506cee700" />
+<img width="458" alt="Screenshot 2025-04-09 at 11 55 24 PM" src="https://github.com/user-attachments/assets/e115cb3a-3ad6-4086-ac21-b7f506cee700" />
 
 ---
 
