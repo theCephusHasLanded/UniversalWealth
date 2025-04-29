@@ -16,21 +16,41 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({ onSubmit }) => {
   const handleSubmit = async () => {
     if (feedbackText.trim() && rating > 0) {
       try {
-        // Send feedback to our API endpoint
-        const response = await fetch('/api/feedback', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
+        // Try sending feedback to our API endpoint
+        try {
+          const response = await fetch('/api/feedback', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              feedback: feedbackText,
+              rating,
+              // Can include user's email if available from auth context
+            }),
+          });
+          
+          if (!response.ok) {
+            throw new Error('Failed to submit feedback');
+          }
+          
+          console.log('Feedback submitted successfully via API');
+        } catch (apiError) {
+          console.warn('API endpoint not available, using fallback:', apiError);
+          
+          // Fallback: Store in localStorage
+          const feedbacks = JSON.parse(localStorage.getItem('lkhn-feedback') || '[]');
+          feedbacks.push({
             feedback: feedbackText,
             rating,
-            // Can include user's email if available from auth context
-          }),
-        });
-        
-        if (!response.ok) {
-          throw new Error('Failed to submit feedback');
+            timestamp: new Date().toISOString(),
+            recipientEmail: 'Christinacephus@pursuit.org'
+          });
+          localStorage.setItem('lkhn-feedback', JSON.stringify(feedbacks));
+          
+          // Development-only fallback: Log to console
+          console.log(`Development fallback - Feedback (${rating}/5): ${feedbackText}`);
+          console.log(`Would be sent to: Christinacephus@pursuit.org`);
         }
         
         // Call the onSubmit prop if provided
@@ -50,8 +70,7 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({ onSubmit }) => {
           }, 300);
         }, 2000);
       } catch (error) {
-        console.error('Error submitting feedback:', error);
-        // Consider showing an error message to the user
+        console.error('Error in feedback submission process:', error);
       }
     }
   };

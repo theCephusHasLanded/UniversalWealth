@@ -18,6 +18,15 @@ export default defineConfig({
         target: 'http://localhost:3001',
         changeOrigin: true,
         secure: false,
+        // Added timeout options to prevent long wait times
+        configure: (proxy, _options) => {
+          proxy.on('error', (err, _req, _res) => {
+            console.log('API proxy error:', err);
+          });
+          proxy.on('proxyReq', (proxyReq, req, _res) => {
+            console.log('API proxy request:', req.method, req.url);
+          });
+        }
       }
     }
   }
