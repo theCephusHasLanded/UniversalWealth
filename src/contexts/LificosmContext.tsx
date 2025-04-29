@@ -8,6 +8,8 @@ import {
   LificosmMarketplaceItem,
   LificosmNotification
 } from '../types/lificosm';
+import { useAuth } from '../auth/AuthContext';
+import { useUser } from './UserContext';
 
 interface LificosmContextType {
   currentUser: LificosmUser | null;
@@ -31,38 +33,6 @@ interface LificosmContextType {
 }
 
 const LificosmContext = createContext<LificosmContextType | undefined>(undefined);
-
-// Mock data for demonstration purposes
-const mockUser: LificosmUser = {
-  id: 'user1',
-  name: 'Daisha Johnson',
-  email: 'daisha@example.com',
-  phoneNumber: '212-555-1234',
-  tier: 'Prime',
-  lificredits: 2750,
-  joinDate: '2023-11-15',
-  preferences: {
-    notifications: true,
-    categories: ['food', 'culture', 'education'],
-    neighborhood: 'South Bronx'
-  },
-  savings: {
-    goal: 5000,
-    current: 1250,
-    history: [
-      {
-        date: '2024-04-01',
-        amount: 125,
-        source: 'Grocery cashback'
-      },
-      {
-        date: '2024-03-15',
-        amount: 75,
-        source: 'Local shopping'
-      }
-    ]
-  }
-};
 
 const mockWallet: LificosmWallet = {
   userId: 'user1',
@@ -281,8 +251,59 @@ const mockNotifications: LificosmNotification[] = [
 ];
 
 export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [currentUser, setCurrentUser] = useState<LificosmUser | null>(mockUser);
-  const [wallet, setWallet] = useState<LificosmWallet | null>(mockWallet);
+  // Get Firebase auth user and profile from context
+  const { currentUser: authUser } = useAuth();
+  const { userProfile } = useUser();
+  
+  // Create Lificosm user from Firebase auth user and profile
+  const createLificosmUserFromFirebase = () => {
+    if (!authUser || !userProfile) return null;
+    
+    return {
+      id: authUser.uid,
+      name: userProfile.displayName || authUser.displayName || 'User',
+      email: userProfile.email || authUser.email || '',
+      phoneNumber: userProfile.phoneNumber || '',
+      tier: 'Prime', // Could be determined based on userProfile data
+      lificredits: 2750, // This could be fetched from a separate collection
+      joinDate: userProfile.createdAt ? new Date(userProfile.createdAt.toDate()).toISOString().split('T')[0] : new Date().toISOString().split('T')[0],
+      preferences: {
+        notifications: true,
+        categories: ['food', 'culture', 'education'],
+        neighborhood: 'South Bronx'
+      },
+      savings: {
+        goal: 5000,
+        current: 1250,
+        history: [
+          {
+            date: '2024-04-01',
+            amount: 125,
+            source: 'Grocery cashback'
+          },
+          {
+            date: '2024-03-15',
+            amount: 75,
+            source: 'Local shopping'
+          }
+        ]
+      }
+    } as LificosmUser;
+  };
+
+  // Compute lificosm user from Firebase user
+  const [lificosmUser, setLificosmUser] = useState<LificosmUser | null>(null);
+  
+  // Update lificosm user whenever auth user or profile changes
+  useEffect(() => {
+    if (authUser && userProfile) {
+      setLificosmUser(createLificosmUserFromFirebase());
+    } else {
+      setLificosmUser(null);
+    }
+  }, [authUser, userProfile]);
+  
+  const [wallet, setWallet] = useState<LificosmWallet | null>(null);
   const [events, setEvents] = useState<LificosmEvent[]>(mockEvents);
   const [businesses, setBusinesses] = useState<LificosmBusiness[]>(mockBusinesses);
   const [receipts, setReceipts] = useState<LificosmReceipt[]>(mockReceipts);
@@ -290,15 +311,27 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const [notifications, setNotifications] = useState<LificosmNotification[]>(mockNotifications);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [error, setError] = useState<string | null>(null);
+  
+  // Set up wallet when user changes
+  useEffect(() => {
+    if (lificosmUser) {
+      // In a real app, this would fetch from Firestore
+      setWallet({
+        ...mockWallet,
+        userId: lificosmUser.id
+      });
+    } else {
+      setWallet(null);
+    }
+  }, [lificosmUser]);
 
-  // Mock login function
+  // Login is handled by Firebase Auth
   const login = async (email: string, password: string) => {
     setIsLoading(true);
     try {
-      // In a real app, this would be an API call
+      // In a real app with Firebase, auth would be handled by Firebase Auth
+      // We're just mocking the delay for now
       await new Promise(resolve => setTimeout(resolve, 1000));
-      setCurrentUser(mockUser);
-      setWallet(mockWallet);
       setError(null);
     } catch (err) {
       setError('Login failed. Please try again.');
@@ -307,10 +340,9 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     }
   };
 
-  // Mock logout function
+  // Logout is handled by Firebase Auth
   const logout = () => {
-    setCurrentUser(null);
-    setWallet(null);
+    // Firebase Auth would handle this
   };
 
   // Register for an event
@@ -322,10 +354,10 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       
       // Update events with user registered
       const updatedEvents = events.map(event => {
-        if (event.id === eventId && currentUser) {
+        if (event.id === eventId && lificosmUser) {
           return {
             ...event,
-            attendees: [...event.attendees, currentUser.id]
+            attendees: [...event.attendees, lificosmUser.id]
           };
         }
         return event;
@@ -352,7 +384,7 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // Create a new receipt with a generated ID
       const newReceipt: LificosmReceipt = {
         id: `receipt${receipts.length + 1}`,
-        userId: currentUser?.id || '',
+        userId: lificosmUser?.id || '',
         businessId: receipt.businessId || '',
         date: receipt.date || new Date().toISOString().split('T')[0],
         total: receipt.total || 0,
@@ -364,7 +396,7 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       setReceipts([...receipts, newReceipt]);
       
       // Update wallet with earned points and cashback
-      if (wallet && currentUser) {
+      if (wallet && lificosmUser) {
         const updatedWallet = {
           ...wallet,
           lificredits: wallet.lificredits + (newReceipt.points || 0),
@@ -435,7 +467,7 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       
       const newItem: LificosmMarketplaceItem = {
         id: `item${marketplace.length + 1}`,
-        sellerId: currentUser?.id || '',
+        sellerId: lificosmUser?.id || '',
         title: item.title || '',
         description: item.description || '',
         category: item.category || 'other',
@@ -476,9 +508,9 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
       // In a real app, this would be an API call
       await new Promise(resolve => setTimeout(resolve, 1000));
       
-      if (currentUser) {
-        const updatedUser = { ...currentUser, ...updates };
-        setCurrentUser(updatedUser);
+      if (lificosmUser) {
+        const updatedUser = { ...lificosmUser, ...updates };
+        setLificosmUser(updatedUser);
       }
       
       setError(null);
@@ -504,7 +536,7 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   return (
     <LificosmContext.Provider
       value={{
-        currentUser,
+        currentUser: lificosmUser,
         wallet,
         events,
         businesses,
