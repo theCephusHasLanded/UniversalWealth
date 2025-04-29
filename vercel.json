@@ -26,5 +26,9 @@
       ]
     }
   ],
-  "installCommand": "npm install --legacy-peer-deps"
+  "installCommand": "npm install --legacy-peer-deps --force",
+  "builds": [
+    { "src": "server/api-server.js", "use": "@vercel/node" },
+    { "src": "vercel-build.js", "use": "@vercel/node", "config": { "distDir": "dist" } }
+  ]
 }

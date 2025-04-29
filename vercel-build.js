@@ -28,6 +28,10 @@ execSync('npm install --legacy-peer-deps', { stdio: 'inherit' });
 
 // Run the build command
 console.log('Building the application...');
+console.log('Current directory contents:', fs.readdirSync('.').join(', '));
+console.log('Package.json content:', fs.readFileSync('./package.json', 'utf8'));
+console.log('Node.js version:', process.version);
 execSync('npm run build', { stdio: 'inherit' });
 
 console.log('Build completed successfully!');
+console.log('Build timestamp:', new Date().toISOString());
