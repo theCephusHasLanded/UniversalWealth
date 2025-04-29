@@ -32,7 +32,9 @@
         "test:firebase": "vite --mode test",
         "lint": "eslint src --ext .ts,.tsx",
         "typecheck": "tsc --noEmit",
-        "vercel-build": "npm run build"
+        "vercel-build": "npm run build",
+        "preinstall": "echo 'Setting up project...'",
+        "postinstall": "echo 'Installation complete!'"
     },
     "devDependencies": {
         "@types/qrcode": "^1.5.5",
