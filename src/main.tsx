@@ -8,6 +8,7 @@ import './styles/globals.css'
 import { TranslationProvider } from './contexts/TranslationContext'
 import { LificosmProvider } from './contexts/LificosmContext'
 import { AuthProvider } from './auth/AuthContext'
+import { UserProvider } from './contexts/UserContext'
 
 // Enable future flags for React Router v7 compatibility
 const router = createBrowserRouter(
@@ -16,9 +17,11 @@ const router = createBrowserRouter(
     element: (
       <TranslationProvider>
         <AuthProvider>
-          <LificosmProvider>
-            <App />
-          </LificosmProvider>
+          <UserProvider>
+            <LificosmProvider>
+              <App />
+            </LificosmProvider>
+          </UserProvider>
         </AuthProvider>
       </TranslationProvider>
     ) 

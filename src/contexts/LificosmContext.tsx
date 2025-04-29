@@ -253,11 +253,27 @@ const mockNotifications: LificosmNotification[] = [
 export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   // Get Firebase auth user and profile from context
   const { currentUser: authUser } = useAuth();
-  const { userProfile } = useUser();
+  
+  // Try to use UserContext, but with fallback in case it's not available
+  let userProfile = null;
+  let userContextError = false;
+  
+  try {
+    const userContext = useUser();
+    userProfile = userContext.userProfile;
+  } catch (error) {
+    console.warn('UserContext not available, using fallback profile data:', error);
+    userContextError = true;
+  }
   
   // Create Lificosm user from Firebase auth user and profile
   const createLificosmUserFromFirebase = () => {
-    if (!authUser || !userProfile) return null;
+    if (userContextError) {
+      // Fallback to using mock data when UserContext isn't available
+      return mockUser;
+    }
+    
+    if (!authUser) return null;
     
     return {
       id: authUser.uid,
@@ -296,12 +312,15 @@ export const LificosmProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   
   // Update lificosm user whenever auth user or profile changes
   useEffect(() => {
-    if (authUser && userProfile) {
+    if (userContextError) {
+      // Use mock data when UserContext isn't available
+      setLificosmUser(mockUser);
+    } else if (authUser && userProfile) {
       setLificosmUser(createLificosmUserFromFirebase());
     } else {
       setLificosmUser(null);
     }
-  }, [authUser, userProfile]);
+  }, [authUser, userProfile, userContextError]);
   
   const [wallet, setWallet] = useState<LificosmWallet | null>(null);
   const [events, setEvents] = useState<LificosmEvent[]>(mockEvents);
