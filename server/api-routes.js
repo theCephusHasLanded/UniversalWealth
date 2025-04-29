@@ -84,6 +84,36 @@ app.get('/api/forum/posts', async (req, res) => {
   }
 });
 
+// Feedback endpoint
+app.post('/api/feedback', async (req, res) => {
+  try {
+    const { feedback, rating, email } = req.body;
+    
+    if (!feedback || !rating) {
+      return res.status(400).json({ error: 'Feedback and rating are required' });
+    }
+    
+    // Store feedback in Firestore
+    await db.collection('feedback').add({
+      feedback,
+      rating,
+      email: email || null,
+      createdAt: admin.firestore.Timestamp.now(),
+      recipientEmail: process.env.RECIPIENT_EMAIL || 'Christinacephus@pursuit.org'
+    });
+    
+    // Here you would typically send an email notification
+    // This could be implemented using a Firebase Cloud Function
+    // or a third-party email service like SendGrid
+    console.log(`New feedback received (${rating}/5): ${feedback}`);
+    
+    return res.status(200).json({ message: 'Feedback submitted successfully' });
+  } catch (error) {
+    console.error('Error submitting feedback:', error);
+    return res.status(500).json({ error: 'Failed to submit feedback' });
+  }
+});
+
 // Add other API endpoints as needed
 
 // Default error handler

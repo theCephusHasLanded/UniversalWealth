@@ -13,22 +13,46 @@ const FeedbackButton: React.FC<FeedbackButtonProps> = ({ onSubmit }) => {
   const [hoveredRating, setHoveredRating] = useState(0);
   const [submitted, setSubmitted] = useState(false);
   
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (feedbackText.trim() && rating > 0) {
-      if (onSubmit) {
-        onSubmit(feedbackText, rating);
-      }
-      setSubmitted(true);
-      
-      // Reset after a few seconds
-      setTimeout(() => {
-        setIsOpen(false);
+      try {
+        // Send feedback to our API endpoint
+        const response = await fetch('/api/feedback', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            feedback: feedbackText,
+            rating,
+            // Can include user's email if available from auth context
+          }),
+        });
+        
+        if (!response.ok) {
+          throw new Error('Failed to submit feedback');
+        }
+        
+        // Call the onSubmit prop if provided
+        if (onSubmit) {
+          onSubmit(feedbackText, rating);
+        }
+        
+        setSubmitted(true);
+        
+        // Reset after a few seconds
         setTimeout(() => {
-          setFeedbackText('');
-          setRating(0);
-          setSubmitted(false);
-        }, 300);
-      }, 2000);
+          setIsOpen(false);
+          setTimeout(() => {
+            setFeedbackText('');
+            setRating(0);
+            setSubmitted(false);
+          }, 300);
+        }, 2000);
+      } catch (error) {
+        console.error('Error submitting feedback:', error);
+        // Consider showing an error message to the user
+      }
     }
   };
   

@@ -113,12 +113,15 @@ function App() {
   const [showCookieConsent, setShowCookieConsent] = useState(false);
   
   useEffect(() => {
-    // Check if user has consented to cookies
+    // Only show cookie consent for authenticated users who haven't consented yet
+    // This is to ensure users only see cookie consent after they've logged in
     const hasConsented = localStorage.getItem('lkhn-cookie-consent');
-    if (!hasConsented) {
+    const isAuthenticated = localStorage.getItem('lkhn-authenticated') === 'true';
+    
+    if (!hasConsented && isAuthenticated) {
       setShowCookieConsent(true);
     }
-  }, []);
+  }, [location.pathname]); // Re-check when path changes (user might have just logged in)
   
   const handleCookieConsent = () => {
     setShowCookieConsent(false);
@@ -126,40 +129,43 @@ function App() {
   
   // Feedback handling
   const handleFeedbackSubmit = (feedback: string, rating: number) => {
-    console.log('Feedback received:', feedback, 'Rating:', rating);
-    // In a real app, you would send this to your server
+    console.log('Feedback submitted:', feedback, 'Rating:', rating);
+    // The FeedbackButton component now handles direct API communication
+    // This function remains for additional processing if needed
   };
   
   return (
     <>
-      <UserProvider>
-        {/* Three.js loading animation overlays everything else when active */}
-        {isLoading && (
-          <ThreeJsLoader 
-            onComplete={handleLoadingComplete} 
-            progress={loadingProgress} 
-          />
-        )}
-        
-        {/* Welcome screen shown after successful login */}
-        {showWelcome && (
-          <WelcomeScreen onComplete={handleWelcomeComplete} />
-        )}
-        
-        {/* Main application routes */}
-        <AppRoutes />
-        
-        {/* Feedback button */}
-        <FeedbackButton onSubmit={handleFeedbackSubmit} />
-        
-        {/* Cookie consent banner */}
-        {showCookieConsent && (
-          <CookieConsent 
-            onAccept={handleCookieConsent} 
-            onDecline={handleCookieConsent} 
-          />
-        )}
-      </UserProvider>
+      <AuthProvider>
+        <UserProvider>
+          {/* Three.js loading animation overlays everything else when active */}
+          {isLoading && (
+            <ThreeJsLoader 
+              onComplete={handleLoadingComplete} 
+              progress={loadingProgress} 
+            />
+          )}
+          
+          {/* Welcome screen shown after successful login */}
+          {showWelcome && (
+            <WelcomeScreen onComplete={handleWelcomeComplete} />
+          )}
+          
+          {/* Main application routes */}
+          <AppRoutes />
+          
+          {/* Feedback button */}
+          <FeedbackButton onSubmit={handleFeedbackSubmit} />
+          
+          {/* Cookie consent banner */}
+          {showCookieConsent && (
+            <CookieConsent 
+              onAccept={handleCookieConsent} 
+              onDecline={handleCookieConsent} 
+            />
+          )}
+        </UserProvider>
+      </AuthProvider>
     </>
   );
 }
