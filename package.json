@@ -38,7 +38,10 @@
         "test:firebase": "vite --mode test",
         "lint": "eslint src --ext .ts,.tsx",
         "typecheck": "tsc --noEmit",
-        "vercel-build": "node build.js"
+        "vercel-build": "node build.js",
+        "deploy": "./deploy-firebase.sh",
+        "deploy:functions": "firebase deploy --only functions",
+        "deploy:hosting": "firebase deploy --only hosting"
     },
     "devDependencies": {
         "@types/qrcode": "^1.5.5",
