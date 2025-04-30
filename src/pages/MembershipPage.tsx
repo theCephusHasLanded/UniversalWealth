@@ -6,7 +6,7 @@ import { useTranslation } from '../contexts/TranslationContext';
 import { useUser } from '../contexts/UserContext';
 import UserAvatar from '../components/common/UserAvatar';
 import EyeLogo from '../components/common/EyeLogo';
-import WaitlistModal from '../components/common/WaitlistModal';
+import { useWaitlist } from '../contexts/WaitlistContext';
 
 const MembershipPage: React.FC = () => {
   const { t } = useTranslation();
@@ -22,8 +22,8 @@ const MembershipPage: React.FC = () => {
   const [membershipPoints, setMembershipPoints] = useState(0);
   const [memberSince, setMemberSince] = useState('');
   
-  // State for waitlist modal
-  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
+  // Use the global waitlist context
+  const { showWaitlistModal } = useWaitlist();
   
   // Generate user invitation code on component mount
   useEffect(() => {
@@ -89,14 +89,6 @@ const MembershipPage: React.FC = () => {
     }, 1500);
   };
   
-  // Handle waitlist submission
-  const handleWaitlistSubmit = (email: string, name: string) => {
-    console.log(`Waitlist request submitted: ${name} (${email})`);
-    // In a real app, you would send this data to your backend
-    // This is just a mock implementation
-    
-    // Analytics event could be tracked here
-  };
   
   // Determine membership tier color
   const getTierColor = () => {
@@ -166,12 +158,7 @@ const MembershipPage: React.FC = () => {
   
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
-      {/* Waitlist Modal */}
-      <WaitlistModal 
-        isOpen={showWaitlistModal}
-        onClose={() => setShowWaitlistModal(false)}
-        onSubmit={handleWaitlistSubmit}
-      />
+      {/* Waitlist Modal is now provided by WaitlistContext */}
       
       {/* Membership Header */}
       <div className="relative">
@@ -189,7 +176,7 @@ const MembershipPage: React.FC = () => {
             variant="outline"
             size="sm"
             icon={<Lock size={14} />}
-            onClick={() => setShowWaitlistModal(true)}
+            onClick={showWaitlistModal}
           >
             Request Membership
           </Button>
@@ -354,7 +341,7 @@ const MembershipPage: React.FC = () => {
               
               {/* Request Access Button */}
               <button
-                onClick={() => setShowWaitlistModal(true)}
+                onClick={showWaitlistModal}
                 className="w-full mt-2 py-2 bg-gradient-to-r from-navy-800 to-navy-900 border border-gold/20 hover:border-gold/40 rounded-sm flex items-center justify-center transition-all group"
               >
                 <span className="text-sm text-gold/80 group-hover:text-gold mr-2">Request Early Membership Access</span>

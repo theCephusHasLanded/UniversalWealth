@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useTranslation } from '../contexts/TranslationContext';
+import { Link } from 'react-router-dom';
 import { ArrowRight, ChevronRight, Lock, LogIn, Award, Calendar, Sparkles } from 'lucide-react';
 import Card from '../components/common/Card';
 import FeatureCard from '../components/common/FeatureCard';
@@ -10,6 +11,8 @@ import MembersOnlyTeaser from '../components/common/MembersOnlyTeaser';
 import EyeLogo from '../components/common/EyeLogo';
 import Logo from '../components/common/Logo';
 import SignInButton from '../components/common/SignInButton';
+import CookieConsent from '../components/common/CookieConsent';
+import { useWaitlist } from '../contexts/WaitlistContext';
 
 interface LandingPageProps {
   onGetStarted: () => void;
@@ -18,6 +21,7 @@ interface LandingPageProps {
 
 const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => {
   const { t } = useTranslation();
+  const { showWaitlistModal } = useWaitlist();
   const [currentSlide, setCurrentSlide] = useState(0);
   const [invitationCode, setInvitationCode] = useState('');
   const [isScrolled, setIsScrolled] = useState(false);
@@ -75,7 +79,10 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                 <button className="text-xs uppercase tracking-widest text-neutral-300 hover:text-gold transition-colors">
                   Ecosystem
                 </button>
-                <button className="text-xs uppercase tracking-widest text-neutral-300 hover:text-gold transition-colors">
+                <button 
+                  className="text-xs uppercase tracking-widest text-neutral-300 hover:text-gold transition-colors"
+                  onClick={showWaitlistModal}
+                >
                   Membership
                 </button>
                 <SignInButton 
@@ -129,7 +136,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                 variant="primary"
                 size="lg"
                 icon={<ArrowRight size={16} />}
-                onClick={onGetStarted}
+                onClick={showWaitlistModal}
               >
                 {t('app.join')}
               </ExclusiveButton>
@@ -152,8 +159,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                   onChange={(e) => setInvitationCode(e.target.value)}
                   className="bg-navy-700 border border-navy-500 text-neutral-200 px-4 py-3 w-full focus:outline-none focus:border-gold/50 placeholder:text-neutral-500 text-sm"
                 />
-                <button className="bg-gold hover:bg-gold-600 text-navy-900 px-4 py-3 text-sm uppercase tracking-wider">
-                  Verify
+                <button 
+                  className="bg-gold hover:bg-gold-600 text-navy-900 px-4 py-3 text-sm uppercase tracking-wider"
+                  onClick={() => {
+                    if (!invitationCode.trim()) {
+                      showWaitlistModal();
+                    }
+                  }}
+                >
+                  {invitationCode.trim() ? "Verify" : "Join Waitlist"}
                 </button>
               </div>
             </div>
@@ -346,7 +360,7 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
                 variant="primary"
                 size="lg"
                 icon={<ArrowRight size={16} />}
-                onClick={onGetStarted}
+                onClick={showWaitlistModal}
               >
                 {t('app.join')}
               </ExclusiveButton>
@@ -370,13 +384,15 @@ const LandingPage: React.FC<LandingPageProps> = ({ onGetStarted, onSignIn }) => 
             </div>
             
             <div className="flex space-x-6 text-neutral-400">
-              <span className="text-xs uppercase tracking-widest hover:text-gold cursor-pointer transition-colors">Privacy</span>
-              <span className="text-xs uppercase tracking-widest hover:text-gold cursor-pointer transition-colors">Terms</span>
+              <Link to="/privacy" className="text-xs uppercase tracking-widest hover:text-gold cursor-pointer transition-colors">Privacy</Link>
+              <Link to="/terms" className="text-xs uppercase tracking-widest hover:text-gold cursor-pointer transition-colors">Terms</Link>
               <span className="text-xs uppercase tracking-widest hover:text-gold cursor-pointer transition-colors">Contact</span>
             </div>
           </div>
         </div>
       </footer>
+
+      {/* Cookie Consent only shown after login - moved to App.tsx */}
     </div>
   );
 };

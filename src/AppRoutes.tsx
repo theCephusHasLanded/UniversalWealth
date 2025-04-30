@@ -7,6 +7,7 @@ import ProfilePage from './pages/ProfilePage';
 import { AuthProvider } from './auth/AuthContext';
 import { UserProvider } from './contexts/UserContext';
 import { TranslationProvider } from './contexts/TranslationContext';
+import { WaitlistProvider } from './contexts/WaitlistContext';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './auth/ProtectedRoute';
 
@@ -17,22 +18,24 @@ const AppRoutes: React.FC = () => {
       <TranslationProvider>
         <AuthProvider>
           <UserProvider>
-            <Routes>
-              {/* Public routes */}
-              <Route path="/privacy" element={<PrivacyPolicyPage />} />
-              <Route path="/terms" element={<TermsConditionsPage />} />
-              
-              {/* Protected profile route */}
-              <Route element={<ProtectedRoute fallback={<App />} />}>
-                <Route element={<Layout />}>
-                  <Route path="/profile" element={<ProfilePage />} />
-                  <Route path="/profile/:userId" element={<ProfilePage />} />
+            <WaitlistProvider>
+              <Routes>
+                {/* Public routes */}
+                <Route path="/privacy" element={<PrivacyPolicyPage />} />
+                <Route path="/terms" element={<TermsConditionsPage />} />
+                
+                {/* Protected profile route */}
+                <Route element={<ProtectedRoute fallback={<App />} />}>
+                  <Route element={<Layout />}>
+                    <Route path="/profile" element={<ProfilePage />} />
+                    <Route path="/profile/:userId" element={<ProfilePage />} />
+                  </Route>
                 </Route>
-              </Route>
-              
-              {/* Main app */}
-              <Route path="/*" element={<App />} />
-            </Routes>
+                
+                {/* Main app */}
+                <Route path="/*" element={<App />} />
+              </Routes>
+            </WaitlistProvider>
           </UserProvider>
         </AuthProvider>
       </TranslationProvider>
