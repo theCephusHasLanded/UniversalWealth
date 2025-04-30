@@ -1,5 +1,15 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { 
+  getAuth, 
+  connectAuthEmulator, 
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged, 
+  sendPasswordResetEmail
+} from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import { getPerformance } from 'firebase/performance';
@@ -42,6 +52,12 @@ let performance = null;
 let analytics = null;
 
 // Initialize with default mock objects in case Firebase fails to initialize
+// Provide a mock GoogleAuthProvider class
+const MockGoogleAuthProvider = function() {
+  // Empty constructor
+};
+
+// Create mock auth with all required methods
 let auth = {
   onAuthStateChanged: (callback) => {
     callback(null);
@@ -49,8 +65,16 @@ let auth = {
   },
   signInWithEmailAndPassword: () => Promise.reject(new Error('Firebase not initialized')),
   createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase not initialized')),
-  signOut: () => Promise.resolve()
+  signOut: () => Promise.resolve(),
+  sendPasswordResetEmail: () => Promise.reject(new Error('Firebase not initialized'))
 };
+
+// Attach global firebase auth mocks for AuthContext to use
+// Re-assign the imported GoogleAuthProvider to our mock
+GoogleAuthProvider = MockGoogleAuthProvider;
+
+// Define mock signInWithPopup that will be used when auth is undefined
+const mockSignInWithPopup = () => Promise.reject(new Error('Firebase not initialized'));
 
 let firestore = {
   collection: () => ({
@@ -98,6 +122,9 @@ if (hasFirebaseConfig) {
     auth = getAuth(app);
     firestore = getFirestore(app);
     storage = getStorage(app);
+    
+    // Override signInWithPopup with real one when auth is initialized
+    const realSignInWithPopup = signInWithPopup;
     
     // Only initialize performance in production
     if (import.meta.env.PROD) {

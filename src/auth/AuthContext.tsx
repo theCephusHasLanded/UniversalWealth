@@ -6,10 +6,14 @@ import {
   signOut, 
   onAuthStateChanged,
   GoogleAuthProvider,
-  signInWithPopup,
+  signInWithPopup as firebaseSignInWithPopup,
   sendPasswordResetEmail
 } from 'firebase/auth';
 import { auth } from '../config/firebase';
+
+// Use a safe signInWithPopup function that won't break if it's undefined
+const signInWithPopup = firebaseSignInWithPopup || ((auth, provider) => 
+  Promise.reject(new Error("Firebase not initialized properly")));
 
 interface AuthContextProps {
   currentUser: User | null;
@@ -59,9 +63,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   };
 
   const loginWithGoogle = async (): Promise<User> => {
-    const provider = new GoogleAuthProvider();
-    const result = await signInWithPopup(auth, provider);
-    return result.user;
+    try {
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      return result.user;
+    } catch (error) {
+      console.error('Google sign-in error:', error);
+      throw error;
+    }
   };
 
   const resetPassword = (email: string) => {
