@@ -12,8 +12,11 @@ import MembershipPage from './pages/MembershipPage';
 import HubPage from './pages/HubPage';
 import TrendCryptoPage from './pages/TrendCryptoPage';
 import LificosmPage from './pages/LificosmPage';
+import TermsConditionsPage from './pages/TermsConditionsPage';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import { useUser } from './contexts/UserContext';
 import { WealthProvider } from './contexts/WealthContext';
+import { WaitlistProvider } from './contexts/WaitlistContext';
 import Layout from './components/layout/Layout';
 import ProtectedRoute from './auth/ProtectedRoute';
 
@@ -35,17 +38,29 @@ const AppRoutes: React.FC = () => {
   }, [location.pathname]);
   
   // Fallback component for unauthorized users
-  const LoginFallback = () => (
-    <Navigate to="/landing" replace />
-  );
+  const LoginFallback = () => {
+    // Clear any stale authentication data
+    localStorage.removeItem('lkhn-authenticated');
+    localStorage.removeItem('lkhn-terms-accepted');
+    return <Navigate to="/landing" replace />;
+  };
   
   return (
-    <Routes>
-      {/* Public routes */}
-      <Route 
-        path="/landing" 
-        element={<LandingPage onGetStarted={() => {}} />} 
-      />
+    <WaitlistProvider>
+      <Routes>
+        {/* Public routes */}
+        <Route 
+          path="/landing" 
+          element={<LandingPage onGetStarted={() => {}} />} 
+        />
+        <Route 
+          path="/terms" 
+          element={<TermsConditionsPage />} 
+        />
+        <Route 
+          path="/privacy" 
+          element={<PrivacyPolicyPage />} 
+        />
       
       {/* Protected routes */}
       <Route 
@@ -94,7 +109,11 @@ const AppRoutes: React.FC = () => {
         <Route path="/error" element={<ErrorPage />} />
         <Route path="*" element={<Navigate to="/error" replace />} />
       </Route>
+      
+      {/* Catch-all route - redirect to landing if not authenticated */}
+      <Route path="*" element={<Navigate to="/landing" replace />} />
     </Routes>
+    </WaitlistProvider>
   );
 };
 
