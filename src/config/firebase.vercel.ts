@@ -51,6 +51,13 @@ let app = null;
 let performance = null;
 let analytics = null;
 
+// Add deployment environment information for better debugging
+console.log('Firebase initialization environment:', {
+  hasEnvVars: hasFirebaseConfig,
+  environment: import.meta.env.MODE || 'unknown',
+  timestamp: new Date().toISOString()
+});
+
 // Initialize with default mock objects in case Firebase fails to initialize
 // Provide a mock GoogleAuthProvider class
 const MockGoogleAuthProvider = function() {

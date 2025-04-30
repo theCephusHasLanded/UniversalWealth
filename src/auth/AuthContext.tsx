@@ -98,6 +98,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       let provider;
       try {
         provider = new GoogleAuthProvider();
+        // Add scopes for better user data
+        provider.addScope('email');
+        provider.addScope('profile');
       } catch (e) {
         console.error('Error creating GoogleAuthProvider:', e);
         throw new Error('Could not initialize Google sign-in. Please try another method.');

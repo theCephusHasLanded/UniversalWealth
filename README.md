@@ -79,6 +79,30 @@ See our [security architecture documentation](/setup/security-architecture.md) f
 
 4. The project no longer requires Firebase Realtime Database - all functionality has been migrated to Firestore.
 
+### Vercel Deployment
+
+For proper production deployment to Vercel:
+
+1. **Configure Environment Variables**:
+   - Set all Firebase environment variables in your Vercel project settings:
+     ```
+     VITE_FIREBASE_API_KEY
+     VITE_FIREBASE_AUTH_DOMAIN
+     VITE_FIREBASE_PROJECT_ID
+     VITE_FIREBASE_STORAGE_BUCKET
+     VITE_FIREBASE_MESSAGING_SENDER_ID
+     VITE_FIREBASE_APP_ID
+     VITE_FIREBASE_MEASUREMENT_ID
+     ```
+   - Add `RECIPIENT_EMAIL` for feedback functionality
+   - Set `NODE_ENV=production`
+
+2. **Authentication**:
+   - The platform supports email/password and Google authentication
+   - The code includes fallback mechanisms for when Firebase isn't properly initialized
+
+See `vercel-env-setup.md` for detailed instructions.
+
 ```bash
 # Install dependencies
 npm install

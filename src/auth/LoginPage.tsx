@@ -29,6 +29,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onBackToLanding }) => 
     
     try {
       await login(email, password);
+      localStorage.setItem('lkhn-authenticated', 'true');
       onSuccess();
     } catch (err: any) {
       setError(err?.message || 'Failed to sign in. Please check your credentials.');
@@ -49,6 +50,7 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onBackToLanding }) => 
     
     try {
       await signup(email, password);
+      localStorage.setItem('lkhn-authenticated', 'true');
       onSuccess();
     } catch (err: any) {
       setError(err?.message || 'Failed to create an account.');
@@ -62,10 +64,19 @@ const LoginPage: React.FC<LoginPageProps> = ({ onSuccess, onBackToLanding }) => 
     setLoading(true);
     
     try {
+      console.log('Starting Google login from UI');
       await loginWithGoogle();
+      localStorage.setItem('lkhn-authenticated', 'true');
+      console.log('Google login successful, redirecting');
       onSuccess();
     } catch (err: any) {
-      setError(err?.message || 'Failed to sign in with Google.');
+      console.error('Google login UI error:', err);
+      // Show a more user-friendly error message
+      const errorMessage = err?.message || 'Failed to sign in with Google.';
+      const friendlyError = errorMessage.includes('Firebase') 
+        ? 'Google sign-in is temporarily unavailable. Please try using email/password.' 
+        : errorMessage;
+      setError(friendlyError);
       setLoading(false);
     }
   };
