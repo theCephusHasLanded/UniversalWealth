@@ -1,11 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Check, Gift, Users, CheckCircle, Clock, ArrowRight, Award, Star, Shield, Trophy, User } from 'lucide-react';
+import { Copy, Check, Gift, Users, CheckCircle, Clock, ArrowRight, Award, Star, Shield, Trophy, User, Lock } from 'lucide-react';
 import Card from '../components/common/Card';
 import Button from '../components/common/Button';
 import { useTranslation } from '../contexts/TranslationContext';
 import { useUser } from '../contexts/UserContext';
 import UserAvatar from '../components/common/UserAvatar';
 import EyeLogo from '../components/common/EyeLogo';
+import WaitlistModal from '../components/common/WaitlistModal';
 
 const MembershipPage: React.FC = () => {
   const { t } = useTranslation();
@@ -20,6 +21,9 @@ const MembershipPage: React.FC = () => {
   const [membershipTier, setMembershipTier] = useState<'bronze' | 'silver' | 'gold' | 'platinum'>('silver');
   const [membershipPoints, setMembershipPoints] = useState(0);
   const [memberSince, setMemberSince] = useState('');
+  
+  // State for waitlist modal
+  const [showWaitlistModal, setShowWaitlistModal] = useState(false);
   
   // Generate user invitation code on component mount
   useEffect(() => {
@@ -83,6 +87,15 @@ const MembershipPage: React.FC = () => {
       setInviteCode(`${codeBase}-${randomPart}`);
       setIsGenerating(false);
     }, 1500);
+  };
+  
+  // Handle waitlist submission
+  const handleWaitlistSubmit = (email: string, name: string) => {
+    console.log(`Waitlist request submitted: ${name} (${email})`);
+    // In a real app, you would send this data to your backend
+    // This is just a mock implementation
+    
+    // Analytics event could be tracked here
   };
   
   // Determine membership tier color
@@ -153,15 +166,33 @@ const MembershipPage: React.FC = () => {
   
   return (
     <div className="space-y-8 max-w-4xl mx-auto">
+      {/* Waitlist Modal */}
+      <WaitlistModal 
+        isOpen={showWaitlistModal}
+        onClose={() => setShowWaitlistModal(false)}
+        onSubmit={handleWaitlistSubmit}
+      />
+      
       {/* Membership Header */}
       <div className="relative">
         <div className="absolute top-0 right-0 opacity-10 pointer-events-none">
           <EyeLogo size={256} variant="gold" expressiveness="low" />
         </div>
         
-        <div className="flex items-center mb-2">
-          <div className="h-px w-6 bg-gold mr-2"></div>
-          <h2 className="text-sm font-normal tracking-widest text-gold uppercase">MEMBERSHIP & INVITATION</h2>
+        <div className="flex items-center justify-between mb-2">
+          <div className="flex items-center">
+            <div className="h-px w-6 bg-gold mr-2"></div>
+            <h2 className="text-sm font-normal tracking-widest text-gold uppercase">MEMBERSHIP & INVITATION</h2>
+          </div>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            icon={<Lock size={14} />}
+            onClick={() => setShowWaitlistModal(true)}
+          >
+            Request Membership
+          </Button>
         </div>
         
         <div className="flex flex-col md:flex-row gap-8 mt-6">
@@ -320,6 +351,17 @@ const MembershipPage: React.FC = () => {
               <div className="text-xs text-neutral-400 mb-4">
                 Invite up to 10 people with your exclusive code. Every successful invitation earns you 25 LKHN points toward your next tier.
               </div>
+              
+              {/* Request Access Button */}
+              <button
+                onClick={() => setShowWaitlistModal(true)}
+                className="w-full mt-2 py-2 bg-gradient-to-r from-navy-800 to-navy-900 border border-gold/20 hover:border-gold/40 rounded-sm flex items-center justify-center transition-all group"
+              >
+                <span className="text-sm text-gold/80 group-hover:text-gold mr-2">Request Early Membership Access</span>
+                <div className="w-5 h-5 rounded-full bg-gold/10 flex items-center justify-center">
+                  <ArrowRight size={12} className="text-gold" />
+                </div>
+              </button>
             </Card>
           </div>
         </div>
