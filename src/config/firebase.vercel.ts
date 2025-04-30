@@ -69,9 +69,9 @@ let auth = {
   sendPasswordResetEmail: () => Promise.reject(new Error('Firebase not initialized'))
 };
 
-// Attach global firebase auth mocks for AuthContext to use
-// Re-assign the imported GoogleAuthProvider to our mock
-GoogleAuthProvider = MockGoogleAuthProvider;
+// Define our safe versions for auth functions
+// We can't reassign imports directly, but we'll handle this in AuthContext
+const SafeGoogleAuthProvider = MockGoogleAuthProvider;
 
 // Define mock signInWithPopup that will be used when auth is undefined
 const mockSignInWithPopup = () => Promise.reject(new Error('Firebase not initialized'));
@@ -173,12 +173,15 @@ if (hasFirebaseConfig) {
   }
 }
 
+// Export the SafeGoogleAuthProvider and mockSignInWithPopup for use in AuthContext
 export { 
   auth, 
   firestore, 
   storage, 
   database,
   performance, 
-  analytics 
+  analytics,
+  SafeGoogleAuthProvider,
+  mockSignInWithPopup
 };
 export default app;

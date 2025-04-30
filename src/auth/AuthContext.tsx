@@ -5,15 +5,20 @@ import {
   signInWithEmailAndPassword,
   signOut, 
   onAuthStateChanged,
-  GoogleAuthProvider,
+  GoogleAuthProvider as FirebaseGoogleAuthProvider,
   signInWithPopup as firebaseSignInWithPopup,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { auth } from '../config/firebase';
+import { auth, SafeGoogleAuthProvider, mockSignInWithPopup } from '../config/firebase';
 
-// Use a safe signInWithPopup function that won't break if it's undefined
-const signInWithPopup = firebaseSignInWithPopup || ((auth, provider) => 
-  Promise.reject(new Error("Firebase not initialized properly")));
+// Use safe versions that won't break if Firebase isn't initialized
+const GoogleAuthProvider = typeof FirebaseGoogleAuthProvider === 'function' 
+  ? FirebaseGoogleAuthProvider 
+  : SafeGoogleAuthProvider;
+
+const signInWithPopup = typeof firebaseSignInWithPopup === 'function'
+  ? firebaseSignInWithPopup
+  : mockSignInWithPopup;
 
 interface AuthContextProps {
   currentUser: User | null;
