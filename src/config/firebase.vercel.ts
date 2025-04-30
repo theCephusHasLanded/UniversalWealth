@@ -37,7 +37,41 @@ const firebaseConfig = hasFirebaseConfig ? {
 console.log(`Using ${hasFirebaseConfig ? 'REAL' : 'MOCK'} Firebase configuration`);
 
 // If using mock config, don't actually initialize Firebase to avoid errors
-let app, auth, firestore, storage, performance, analytics = null;
+let app = null;
+let performance = null;
+let analytics = null;
+
+// Initialize with default mock objects in case Firebase fails to initialize
+let auth = {
+  onAuthStateChanged: (callback) => {
+    callback(null);
+    return () => {};
+  },
+  signInWithEmailAndPassword: () => Promise.reject(new Error('Firebase not initialized')),
+  createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase not initialized')),
+  signOut: () => Promise.resolve()
+};
+
+let firestore = {
+  collection: () => ({
+    doc: () => ({
+      get: () => Promise.resolve({ exists: () => false, data: () => null }),
+      set: () => Promise.resolve(),
+      update: () => Promise.resolve()
+    }),
+    add: () => Promise.resolve({ id: 'mock-id' })
+  })
+};
+
+let storage = {
+  ref: () => ({
+    put: () => ({
+      on: () => {},
+      then: (cb) => cb({ ref: { getDownloadURL: () => Promise.resolve('https://mock-url.com/image.jpg') } })
+    })
+  })
+};
+
 let database = {
   ref: () => ({
     set: () => Promise.resolve(),
@@ -108,36 +142,7 @@ if (hasFirebaseConfig) {
     });
   } catch (err) {
     console.error('Firebase initialization failed:', err);
-    // If Firebase initialization fails, fall back to mock objects
-    auth = {
-      onAuthStateChanged: (callback) => {
-        callback(null);
-        return () => {};
-      },
-      signInWithEmailAndPassword: () => Promise.reject(new Error('Firebase not initialized')),
-      createUserWithEmailAndPassword: () => Promise.reject(new Error('Firebase not initialized')),
-      signOut: () => Promise.resolve()
-    };
-    
-    firestore = {
-      collection: () => ({
-        doc: () => ({
-          get: () => Promise.resolve({ exists: () => false, data: () => null }),
-          set: () => Promise.resolve(),
-          update: () => Promise.resolve()
-        }),
-        add: () => Promise.resolve({ id: 'mock-id' })
-      })
-    };
-    
-    storage = {
-      ref: () => ({
-        put: () => ({
-          on: () => {},
-          then: (cb) => cb({ ref: { getDownloadURL: () => Promise.resolve('https://mock-url.com/image.jpg') } })
-        })
-      })
-    };
+    // Mock objects already defined as fallbacks
   }
 }
 
