@@ -31,11 +31,7 @@
         "api:debug": "node --inspect server/api-server.js",
         "test:firebase": "vite --mode test",
         "lint": "eslint src --ext .ts,.tsx",
-        "typecheck": "tsc --noEmit",
-        "vercel-build": "npm run build",
-        "preinstall": "echo 'Setting up project...'",
-        "postinstall": "echo 'Installation complete!'",
-        "vercel-dev": "vercel dev"
+        "typecheck": "tsc --noEmit"
     },
     "devDependencies": {
         "@types/qrcode": "^1.5.5",
