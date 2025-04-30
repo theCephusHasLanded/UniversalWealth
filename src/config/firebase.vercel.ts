@@ -12,6 +12,7 @@ import {
 } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import { getPerformance } from 'firebase/performance';
 import { getAnalytics, isSupported, setConsent } from 'firebase/analytics';
 import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
@@ -76,6 +77,11 @@ let auth = {
   sendPasswordResetEmail: () => Promise.reject(new Error('Firebase not initialized'))
 };
 
+// Mock functions
+let functions = {
+  httpsCallable: (name) => () => Promise.reject(new Error('Firebase Functions not initialized'))
+};
+
 // Define our safe versions for auth functions
 // We can't reassign imports directly, but we'll handle this in AuthContext
 const SafeGoogleAuthProvider = MockGoogleAuthProvider;
@@ -129,6 +135,7 @@ if (hasFirebaseConfig) {
     auth = getAuth(app);
     firestore = getFirestore(app);
     storage = getStorage(app);
+    functions = getFunctions(app);
     
     // Override signInWithPopup with real one when auth is initialized
     const realSignInWithPopup = signInWithPopup;
@@ -186,6 +193,7 @@ export {
   firestore, 
   storage, 
   database,
+  functions,
   performance, 
   analytics,
   SafeGoogleAuthProvider,

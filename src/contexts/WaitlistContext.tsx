@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from 'react';
+import { getFunctions, httpsCallable } from 'firebase/functions';
 import WaitlistModal from '../components/common/WaitlistModal';
 
 interface WaitlistContextType {
@@ -22,10 +23,25 @@ export const WaitlistProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   const showWaitlistModal = () => setIsOpen(true);
   const hideWaitlistModal = () => setIsOpen(false);
   
-  const handleWaitlistSubmit = (email: string, name: string) => {
+  const handleWaitlistSubmit = async (email: string, name: string) => {
     console.log(`Waitlist request submitted: ${name} (${email})`);
-    // In a real app, you would send this data to your backend
-    // This is just a mock implementation
+    
+    try {
+      // Call the Firebase function to send email
+      const functions = getFunctions();
+      const sendWaitlistEmail = httpsCallable(functions, 'sendWaitlistConfirmation');
+      
+      // This is wrapped in a try/catch so if Firebase Functions isn't set up yet,
+      // the app will still work and just log the submission
+      await sendWaitlistEmail({ email, name });
+      console.log('Waitlist confirmation email sent');
+      
+      // Store in Firestore for backup
+      // We could also implement this to store data even if the email fails
+    } catch (error) {
+      console.error('Error submitting waitlist request:', error);
+      // The UI will still show success, but we log the error
+    }
     
     // Analytics event could be tracked here
   };
