@@ -14,6 +14,38 @@ For proper functioning of the LKHN Universal Wealth platform on Vercel, you need
    - Description: Sets the environment to production mode
    - Purpose: Enables production-specific optimizations and behaviors
 
+## Firebase Configuration Variables
+
+To fix the "Firebase: Error (auth/invalid-api-key)" error, set these Firebase variables:
+
+1. **VITE_FIREBASE_API_KEY**
+   - Value: Your Firebase API key
+   - Example: `AIzaSyA1BCDeFgHiJkLmNoPQRstUVWxyz12345`
+
+2. **VITE_FIREBASE_AUTH_DOMAIN**
+   - Value: Your Firebase auth domain
+   - Example: `your-project-id.firebaseapp.com`
+
+3. **VITE_FIREBASE_PROJECT_ID**
+   - Value: Your Firebase project ID
+   - Example: `your-project-id`
+
+4. **VITE_FIREBASE_STORAGE_BUCKET**
+   - Value: Your Firebase storage bucket
+   - Example: `your-project-id.appspot.com`
+
+5. **VITE_FIREBASE_MESSAGING_SENDER_ID**
+   - Value: Your Firebase messaging sender ID
+   - Example: `123456789012`
+
+6. **VITE_FIREBASE_APP_ID**
+   - Value: Your Firebase app ID
+   - Example: `1:123456789012:web:abcdef1234567890`
+
+7. **VITE_FIREBASE_MEASUREMENT_ID**
+   - Value: Your Firebase measurement ID
+   - Example: `G-ABCDEF1234`
+
 ## Firebase Configuration
 
 Since the feedback system stores data in Firebase, you'll need to add your Firebase service account credentials.
