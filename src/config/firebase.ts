@@ -1,5 +1,15 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, connectAuthEmulator } from 'firebase/auth';
+import { 
+  getAuth, 
+  connectAuthEmulator,
+  GoogleAuthProvider,
+  signInWithPopup,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
+  onAuthStateChanged,
+  sendPasswordResetEmail
+} from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
 import { getStorage, connectStorageEmulator } from 'firebase/storage';
 import { getPerformance } from 'firebase/performance';
@@ -76,12 +86,23 @@ const database = {
   }
 };
 
+// Provide fallback implementations for auth functions in case the real ones fail
+const MockGoogleAuthProvider = function() {
+  // Empty constructor
+};
+
+// These are only used as fallbacks in case Firebase auth fails to initialize
+const SafeGoogleAuthProvider = GoogleAuthProvider;
+const mockSignInWithPopup = signInWithPopup;
+
 export { 
   auth, 
   firestore, 
   storage, 
   database, // Now it's a mock object
   performance, 
-  analytics 
+  analytics,
+  SafeGoogleAuthProvider,
+  mockSignInWithPopup
 };
 export default app;

@@ -9,16 +9,39 @@ import {
   signInWithPopup as firebaseSignInWithPopup,
   sendPasswordResetEmail
 } from 'firebase/auth';
-import { auth, SafeGoogleAuthProvider, mockSignInWithPopup } from '../config/firebase';
+import { auth } from '../config/firebase';
 
-// Use safe versions that won't break if Firebase isn't initialized
-const GoogleAuthProvider = typeof FirebaseGoogleAuthProvider === 'function' 
-  ? FirebaseGoogleAuthProvider 
-  : SafeGoogleAuthProvider;
+// Import directly from Firebase auth and handle any possible errors at runtime
+try {
+  // Check if Firebase auth is properly initialized
+  if (auth === undefined || auth === null) {
+    console.warn('Firebase auth not initialized properly');
+  }
+} catch (e) {
+  console.error('Error checking Firebase auth initialization:', e);
+}
 
-const signInWithPopup = typeof firebaseSignInWithPopup === 'function'
-  ? firebaseSignInWithPopup
-  : mockSignInWithPopup;
+// Simple wrappers to make auth provider creation more resilient
+const GoogleAuthProvider = FirebaseGoogleAuthProvider || 
+  function() { 
+    console.warn('Using mock GoogleAuthProvider');
+    return {}; 
+  };
+
+// Wrapper around signInWithPopup to handle possible errors
+const signInWithPopup = function(auth, provider) {
+  try {
+    if (typeof firebaseSignInWithPopup === 'function') {
+      return firebaseSignInWithPopup(auth, provider);
+    } else {
+      console.warn('signInWithPopup not available, using fallback');
+      return Promise.reject(new Error('Firebase signInWithPopup not available'));
+    }
+  } catch (e) {
+    console.error('Error in signInWithPopup:', e);
+    return Promise.reject(e);
+  }
+};
 
 interface AuthContextProps {
   currentUser: User | null;
@@ -69,8 +92,31 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const loginWithGoogle = async (): Promise<User> => {
     try {
-      const provider = new GoogleAuthProvider();
+      console.log('Starting Google login process');
+      
+      // Create provider with error handling
+      let provider;
+      try {
+        provider = new GoogleAuthProvider();
+      } catch (e) {
+        console.error('Error creating GoogleAuthProvider:', e);
+        throw new Error('Could not initialize Google sign-in. Please try another method.');
+      }
+      
+      // Try to sign in with popup
+      if (!auth) {
+        console.error('Auth is not initialized');
+        throw new Error('Authentication service is not available');
+      }
+      
+      console.log('Attempting signInWithPopup');
       const result = await signInWithPopup(auth, provider);
+      
+      if (!result || !result.user) {
+        throw new Error('Failed to get user data from Google sign-in');
+      }
+      
+      console.log('Google sign-in successful');
       return result.user;
     } catch (error) {
       console.error('Google sign-in error:', error);
