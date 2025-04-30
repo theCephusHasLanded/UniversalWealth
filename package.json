@@ -34,7 +34,8 @@
         "typecheck": "tsc --noEmit",
         "vercel-build": "npm run build",
         "preinstall": "echo 'Setting up project...'",
-        "postinstall": "echo 'Installation complete!'"
+        "postinstall": "echo 'Installation complete!'",
+        "vercel-dev": "vercel dev"
     },
     "devDependencies": {
         "@types/qrcode": "^1.5.5",
